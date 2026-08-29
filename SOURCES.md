@@ -5,7 +5,7 @@ repository matches the structure used across all four Claude certification
 field guides from the start; it will be filled in as the guide is written.
 
 ## Official exam guide
-- Version: 1.0, effective July 2026
+- Release: v1.0 (valid from July 2026 onwards)
 - Local path: `_exam-guides/ccdv-f/` — not committed, see the restructure plan §4
 - What a future guide would take from it: the eight domain names and weights,
   and the objective inventory. Objective descriptions would be paraphrases,
