@@ -30,7 +30,15 @@ An official-grade, community-maintained field guide and practice suite for the *
    - **[API & LLM Diagnostic Quiz](practice/diagnostic-quiz/ccdv-f-diagnostic-quiz.md)** (15 items)
    - **[Phase 1 Concept Drills](practice/concept-drills/ccdv-f-concept-drills.md)** (53 items)
    - **[Phase 2 Scenario Domain Drills](practice/scenario-drills/ccdv-f-scenario-drills.md)** (53 items)
-   - **[Domain 2 Drill (rebuilt, scenario-based)](practice/domain-drills/d2-domain-drill.md)** (36 items — 2× exam volume, sealed key)
+   - **Domain Drills (rebuilt, scenario-based, sealed key)** — 2× exam volume per domain (112 items total):
+     [D1](practice/domain-drills/d1-domain-drill.md) (16) ·
+     [D2](practice/domain-drills/d2-domain-drill.md) (36) ·
+     [D3](practice/domain-drills/d3-domain-drill.md) (6) ·
+     [D4](practice/domain-drills/d4-domain-drill.md) (6) ·
+     [D5](practice/domain-drills/d5-domain-drill.md) (18) ·
+     [D6](practice/domain-drills/d6-domain-drill.md) (12) ·
+     [D7](practice/domain-drills/d7-domain-drill.md) (8) ·
+     [D8](practice/domain-drills/d8-domain-drill.md) (10)
    - **[Full Mock Exam 1 (Diagnostic Paper)](practice/mocks/mock-1.md)** (53 items)
    - **[Full Mock Exam 2 (Timed Paper)](practice/mocks/mock-2.md)** (53 items)
 3. **Automated Quality & Provenance Gate Tools**:
@@ -53,14 +61,14 @@ python3 tools/check-item-quality.py \
   practice/mocks/mock-2.md
 ```
 
-The `domain-drills/` sets use a sealed-key format (answers in a separate `*-key.md` file, not inline) and must be checked one set at a time with `--key`:
+The `domain-drills/` sets use a sealed-key format (answers in a separate `*-key.md` file, not inline) and must be checked one set at a time with `--key`, e.g.:
 
 ```bash
 python3 tools/check-item-quality.py practice/domain-drills/d2-domain-drill.md \
   --key practice/domain-drills/d2-domain-drill-key.md
 ```
 
-All 5 practice sets pass all 8 cue quality targets.
+Substitute `d1` through `d8` for the other seven domains. All 5 flat practice sets plus all 8 domain-drill sets pass all 9 cue quality targets (`check-item-quality.py`), the provenance scan, and the near-clone check.
 
 ---
 
