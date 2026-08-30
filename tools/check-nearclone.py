@@ -12,8 +12,10 @@ Usage
   python3 check-nearclone.py NEW [NEW ...] --against OLD [OLD ...] [--threshold 0.6]
 
 NEW accepts a bank *.json (objects with "stem"), a key.json (objects with "exp"
-is ignored; keys carry no stems, so pass the bank or the rendered paper), or a
-rendered paper .md with '## Q<n>' headings and '**A)**' options.
+is ignored; keys carry no stems, so pass the bank or the rendered paper), a
+rendered paper .md with '## Q<n>' headings and '**A)**' options, or the
+'**N.**' / 'A.' domain-drill format used by this project's practice sets
+(stems separated by '---' lines, options as 'A.'-'D.' lines).
 OLD accepts the same forms.
 
 Exit status 1 if anything is at or above the threshold. Rewrite those stems.
@@ -39,7 +41,17 @@ def stems(path):
         stem = re.split(r"^\*\*[A-F]\)\*\*", body, maxsplit=1, flags=re.M)[0]
         out.append((f"Q{m.group(1)}", stem.replace("---", "").strip()))
     if not out:
-        sys.exit(f"{path}: parsed no items — expected '## Q<n>' headings with '**A)**' options")
+        # Fall back to this project's '**N.**' / 'A.' domain-drill format.
+        for block in re.split(r"\n---+\n", text):
+            m = re.search(r"^\*\*(\d+)\.\*\*", block, re.M)
+            if not m:
+                continue
+            body = block[m.end():]
+            stem = re.split(r"^[A-F][.)]\s", body, maxsplit=1, flags=re.M)[0]
+            out.append((f"Q{m.group(1)}", stem.strip()))
+    if not out:
+        sys.exit(f"{path}: parsed no items — expected '## Q<n>' headings with "
+                  f"'**A)**' options, or '**N.**' headings with 'A.'-'D.' options")
     return out
 
 
