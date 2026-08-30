@@ -74,3 +74,75 @@ it, misread the item, or picked the plausible-but-soft option.
 ---
 
 **18. A** — An externalized feature flag lets the team route a percentage of traffic and flip back instantly, with no redeploy. Deploying the new prompt to everyone at once removes the safety net the team explicitly wants; manual opt-in via support tickets doesn't give controlled percentage rollout; maintaining two codebases is exactly the redeploy-to-roll-back problem the team is trying to avoid. *(task 2.6; concept: feature_flag_rollout; item `d2d-18`)*
+
+---
+
+**19. D** — One codebase with externalized per-environment config keeps behavior differences visible in config rather than duplicated across copies of the code, which is exactly what drifts out of sync over time. Separate codebases guarantee drift the moment one copy is edited and the others aren't; merging away the distinction removes a needed capability; deleting staging doesn't address the configuration question at all. *(task 2.6; concept: single_codebase_env_config; item `d2d-19`)*
+
+---
+
+**20. B** — Three sources with an undocumented precedence order is why editing one of them (the `.env` file) had no visible effect — the command line was silently winning. Replacing `.env` with a database doesn't fix an ordering problem; making the retry count non-configurable and removing the CLI flag each address only one of the three sources, not the missing precedence documentation itself. *(task 2.6; concept: single_source_of_truth; item `d2d-20`)*
+
+---
+
+**21. A** — Without a prioritized, explicit criterion for which outcome wins when resolution speed and satisfaction trade off, two reasonable engineers built toward two different targets. More training data, single ownership, and a larger `max_tokens` don't resolve a disagreement about which outcome matters more. *(task 2.1; concept: prioritized_success_criteria; item `d2d-21`)*
+
+---
+
+**22. C** — Explicitly scoping which data sources and access levels a vague requirement actually covers is what would have surfaced the read-only-wiki vs. read-write-database gap before implementation, not after. Code comments, a smarter model, or deferring security review don't address the requirement's own ambiguity. *(task 2.1; concept: scoping_data_access; item `d2d-22`)*
+
+---
+
+**23. D** — Life-cycle rigor scaling with the cost of being wrong and the audience size is why a three-person, afternoon-rebuildable tool doesn't need the same process as a customer-facing system. Uniform rigor regardless of risk, skipping requirements unconditionally, and tying rigor to the exam's domain weighting are each the wrong variable to scale against. *(task 2.2; concept: lifecycle_rigor_scales_with_risk; item `d2d-23`)*
+
+---
+
+**24. A** — The Messages API requires alternating roles; two consecutive `user` messages with no `assistant` turn between them violates that and returns a 400. The API doesn't merge, double-respond to, or reinterpret the second message as a system override — it simply rejects the malformed sequence. *(task 2.3; concept: message_role_alternation; item `d2d-24`)*
+
+---
+
+**25. B** — Native PDF support lets Claude read a document block directly, including its visual layout, up to 100 pages — no manual text conversion needed. The Messages API isn't plain-text-only, PDFs don't need to be pre-split into page images, and there's no 5-page limit. *(task 2.3; concept: native_pdf_support; item `d2d-25`)*
+
+---
+
+**26. C** — `max_tokens` is a required parameter on every Messages API request regardless of whether extended thinking is enabled; omitting it fails the request rather than being inferred from the thinking budget. The API doesn't auto-derive a cap, doesn't allow unlimited output, and doesn't silently disable thinking mode instead of erroring. *(task 2.3; concept: max_tokens_required_with_thinking; item `d2d-26`)*
+
+---
+
+**27. D** — The Message Batches API is built specifically for large, non-urgent workloads like this one and discounts them accordingly. Shrinking `max_tokens` or adding more parallel synchronous requests reduces neither the fixed cost structure nor addresses urgency; switching to streaming doesn't change per-token pricing. *(task 2.3; concept: batch_api_for_bulk_workloads; item `d2d-27`)*
+
+---
+
+**28. B** — Mocks that never touch the real API can't detect a genuine change in the API's response shape; the suite needs some coverage that exercises the real contract, whether live or via a fixture kept in sync with it. Mocking more of the system makes the blind spot worse, not better; removing integration tests or randomizing mock responses don't address the actual gap. *(task 2.4; concept: mocks_dont_catch_contract_drift; item `d2d-28`)*
+
+---
+
+**29. A** — Redacting or excluding sensitive fields before they reach a shared log is the step that was skipped; without it, anyone with log access can see customer names, account numbers, and full conversations. Retention period, compression, and where the log server sits don't address who can read the sensitive content itself. *(task 2.4; concept: redact_before_shared_logging; item `d2d-29`)*
+
+---
+
+**30. C** — The tool has no defensive handling for a caller omitting an optional field, so one bad call's unhandled exception takes down the entire session instead of failing just that call. Making every field mandatory just relocates the failure to a different input shape; a larger `max_tokens` and a different implementation language don't touch the missing error handling. *(task 2.4; concept: defensive_handling_optional_input; item `d2d-30`)*
+
+---
+
+**31. D** — Two independent, subtly different implementations of the same rounding logic is exactly what Don't Repeat Yourself exists to prevent; one shared implementation would have kept results consistent everywhere it's called. Renaming the functions, moving the logic to the model, or adding more per-copy tests all leave the duplication itself in place. *(task 2.4; concept: dry_shared_codebase; item `d2d-31`)*
+
+---
+
+**32. A** — Running the tool with the calling user's own credentials means the database's existing row-level access rules apply exactly as they would for any other client — no new access-control logic needed. A shared service account, no credentials at all, or an administrator credential each bypass or weaken the database's own controls instead of preserving them. *(task 2.5; concept: preserve_row_level_access; item `d2d-32`)*
+
+---
+
+**33. B** — Running arbitrary user-submitted code inside an isolated, resource-limited sandbox is the essential safeguard before this tool reaches production; nothing else in the option list actually contains what the code can do. A system-prompt instruction, more `max_tokens`, or a linter pass are all trust-based or cosmetic and don't stop malicious code from executing on the host. *(task 2.5; concept: sandboxed_code_execution; item `d2d-33`)*
+
+---
+
+**34. D** — A strict `input_schema` on a tool, with tool use forced, enforces the JSON shape structurally — Claude cannot return anything the schema doesn't allow. Repeating instructions in prose, asking users to phrase things differently, or manual sampling review are all requests or spot-checks, not guarantees. *(task 2.5; concept: structural_enforcement_over_prose; item `d2d-34`)*
+
+---
+
+**35. C** — Retrieving the real source documents and passing their actual identifiers into context, then requiring citations to reference one of those identifiers, ties every citation to something genuinely present rather than merely requested. Lower temperature, asking twice, and more `max_tokens` don't connect the citation to an actual retrieved source. *(task 2.5; concept: grounded_citations_via_retrieval; item `d2d-35`)*
+
+---
+
+**36. A** — Externalizing the system prompt into its own versioned config artifact the application loads at startup decouples a wording change from a full code deploy. Keeping multiple copies of `agent.py`, freezing the prompt after release, or slowing the deploy pipeline all leave the actual coupling between prompt and code deploy in place. *(task 2.6; concept: externalize_system_prompt; item `d2d-36`)*
