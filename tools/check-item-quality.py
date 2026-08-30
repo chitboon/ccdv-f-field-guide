@@ -15,6 +15,8 @@ Checks
   length-rank spread    concentration of the answer at one length rank
   length ratio          mean answer length / mean distractor length
   punctuation tell      dash, colon or semicolon appearing mainly in answers
+  option overlap        4-word runs of text shared between two or more
+                        options in the same item (templated filler)
   answer is lowest      (ordering items) answer is the numerically lowest option
   constant positions    (ordering items) a slot identical across all options
 
@@ -56,6 +58,8 @@ Targets
   length-rank spread    no rank above ~40%
   length ratio          0.90 - 1.10
   punctuation tell      no mark in >60% of answers when <40% of distractors
+  option phrase overlap <= 15% of items share a 4-word run between two
+                        options
   answer is lowest      ordering sets only: <= 40%
   constant positions    ordering sets only: none
 """
@@ -288,6 +292,28 @@ def report(path, items):
         print(f"punctuation tell     answers {pc:.0f}%, distractors {pd:.0f}%   "
               f"{'OUTSIDE TARGET' if tell else 'ok'}")
         ok &= not tell
+
+        # Filler/templated-phrase overlap: options that share a run of words
+        # look length-matched without being independently reasoned. Found
+        # empirically in a real draft: 91-100% of items in early CCDV-F
+        # material shared a 4-word run between two options, vs 8-10% in the
+        # CCAR-F material used as the quality bar.
+        def ngrams(text, n=4):
+            words = re.sub(r"[`*]", "", text).lower().split()
+            return {tuple(words[i:i + n]) for i in range(len(words) - n + 1)}
+
+        overlap_items = 0
+        for it in items:
+            grams = [ngrams(v) for v in it["options"].values()]
+            if any(grams[i] & grams[j]
+                   for i in range(len(grams))
+                   for j in range(i + 1, len(grams))):
+                overlap_items += 1
+        pct = 100 * overlap_items / n
+        good = pct <= 15
+        print(f"option phrase overlap {overlap_items}/{n} ({pct:.0f}%)   "
+              f"{'ok' if good else 'OUTSIDE TARGET'}")
+        ok &= good
 
     return ok
 
