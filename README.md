@@ -30,6 +30,7 @@ An official-grade, community-maintained field guide and practice suite for the *
    - **[API & LLM Diagnostic Quiz](practice/diagnostic-quiz/ccdv-f-diagnostic-quiz.md)** (15 items)
    - **[Phase 1 Concept Drills](practice/concept-drills/ccdv-f-concept-drills.md)** (53 items)
    - **[Phase 2 Scenario Domain Drills](practice/scenario-drills/ccdv-f-scenario-drills.md)** (53 items)
+   - **[Domain 2 Drill (rebuilt, scenario-based)](practice/domain-drills/d2-domain-drill.md)** (18 items, sealed key)
    - **[Full Mock Exam 1 (Diagnostic Paper)](practice/mocks/mock-1.md)** (53 items)
    - **[Full Mock Exam 2 (Timed Paper)](practice/mocks/mock-2.md)** (53 items)
 3. **Automated Quality & Provenance Gate Tools**:
@@ -50,6 +51,13 @@ python3 tools/check-item-quality.py \
   practice/scenario-drills/ccdv-f-scenario-drills.md \
   practice/mocks/mock-1.md \
   practice/mocks/mock-2.md
+```
+
+The `domain-drills/` sets use a sealed-key format (answers in a separate `*-key.md` file, not inline) and must be checked one set at a time with `--key`:
+
+```bash
+python3 tools/check-item-quality.py practice/domain-drills/d2-domain-drill.md \
+  --key practice/domain-drills/d2-domain-drill-key.md
 ```
 
 All 5 practice sets pass all 8 cue quality targets.
