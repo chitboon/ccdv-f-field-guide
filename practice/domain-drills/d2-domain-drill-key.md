@@ -146,3 +146,24 @@ it, misread the item, or picked the plausible-but-soft option.
 ---
 
 **36. A** — Externalizing the system prompt into its own versioned config artifact the application loads at startup decouples a wording change from a full code deploy. Keeping multiple copies of `agent.py`, freezing the prompt after release, or slowing the deploy pipeline all leave the actual coupling between prompt and code deploy in place. *(task 2.6; concept: externalize_system_prompt; item `d2d-36`)*
+
+---
+
+**37. B** — The Messages API strictly requires alternating `user` and `assistant` turns; submitting two consecutive `role: "user"` messages throws an HTTP 400 `invalid_request_error`. The API does not automatically merge adjacent user turns, nor does it throw 429/529 for role sequencing. *(task 2.3; concept: invalid_role_sequence_400; item `d2d-37`)*
+
+---
+
+**38. A** — When Extended Thinking is enabled, `budget_tokens` must be strictly less than `max_tokens` (since `max_tokens` includes both thinking and output tokens), and `temperature` must be 1.0 (or omitted); violating either constraint immediately returns an HTTP 400 `invalid_request_error`. *(task 2.3; concept: extended_thinking_parameter_conflict_400; item `d2d-38`)*
+
+---
+
+**39. B** — The `retry-after: 25` header gives the exact integer seconds required before token limits reset; sleeping for 25 seconds guarantees the retry occurs after the quota window refreshes. Setting `max_tokens: 0` is invalid, and switching to Bedrock doesn't solve account-level quota planning. *(task 2.3; concept: quota_exhaustion_retry_after_429; item `d2d-39`)*
+
+---
+
+**40. C** — An `overloaded_error` (HTTP 529) signifies that Anthropic's hosting infrastructure is temporarily handling peak traffic bursts across data centers; client quota is unaffected. The correct mitigation is retrying with exponential backoff and jitter. *(task 2.3; concept: infrastructure_overloaded_529; item `d2d-40`)*
+
+---
+
+**41. C** — Every `tool_result` content block must contain the matching `tool_use_id` from the assistant's previous `tool_use` block; omitting this field causes the Messages API schema validator to reject the payload with an HTTP 400 `invalid_request_error`. *(task 2.3; concept: missing_tool_use_id_400; item `d2d-41`)*
+

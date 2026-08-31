@@ -330,3 +330,99 @@ A. The system prompt should be externalized into its own versioned config artifa
 B. The engineer should keep multiple copies of `agent.py`, one per prompt variant, and swap which file gets deployed.
 C. System prompts should never be changed after the initial release, to avoid needing this process at all.
 D. The deploy pipeline should be made slower and more thorough specifically to compensate for frequent prompt edits.
+
+---
+
+**37.** `[task 2.3 · claude api mechanics: http 400 invalid role sequence]` A developer migrates an automated bot to the Messages API and submits the following payload:
+```json
+{
+  "model": "claude-3-5-sonnet-20241022",
+  "max_tokens": 1024,
+  "messages": [
+    {"role": "user", "content": "Hello"},
+    {"role": "user", "content": "Here is my order number: 10482"}
+  ]
+}
+```
+What error does the Messages API return, and why?
+
+A. HTTP `429 RateLimitError` because submitting two user prompts within one second triggers account throttling.
+B. HTTP `400 InvalidRequestError` because the Messages API strictly requires alternating `user` and `assistant` turns.
+C. HTTP `529 OverloadedError` because the Anthropic routing gateway cannot resolve back-to-back user messages.
+D. HTTP `200 OK` because the API automatically concatenates adjacent messages into a single conversational turn.
+
+---
+
+**38.** `[task 2.3 · claude api mechanics: http 400 parameter conflict]` A team configures Claude 3.7 Sonnet for code refactoring with the following API request:
+```python
+client.messages.create(
+    model="claude-3-7-sonnet-20250219",
+    max_tokens=2048,
+    thinking={"type": "enabled", "budget_tokens": 4096},
+    temperature=0.2,
+    messages=[{"role": "user", "content": "Optimize this binary tree search..."}]
+)
+```
+What error does the API return upon receiving this request?
+
+A. HTTP `400 InvalidRequestError` because `budget_tokens` exceeds `max_tokens` and `temperature` is not 1.0.
+B. HTTP `529 OverloadedError` because extended reasoning models reject low-temperature sampling during peak usage.
+C. HTTP `429 RateLimitError` because reasoning tokens require an active enterprise quota allocation tier.
+D. HTTP `200 OK` with `stop_reason: "thinking_complete"` because the API automatically clamps parameters to valid values.
+
+---
+
+**39.** `[task 2.3 · claude api mechanics: http 429 quota exhaustion]` A document parsing service submits 500 concurrent PDF extraction requests to Claude 3.5 Sonnet. The API responds with an HTTP status code accompanied by these response headers:
+```http
+HTTP/1.1 429 Too Many Requests
+anthropic-ratelimit-tokens-remaining: 0
+retry-after: 25
+```
+How should the client application handle this response?
+
+A. Immediately resend the request to an alternate AWS Bedrock endpoint without waiting for rate limits.
+B. Sleep for 25 seconds as dictated by the `retry-after` header before attempting a retry.
+C. Treat the service as permanently down and alert the infrastructure on-call engineer for quota fixes.
+D. Reduce `max_tokens` to zero and resend immediately to bypass the token rate limit accounting window.
+
+---
+
+**40.** `[task 2.3 · claude api mechanics: http 529 infrastructure capacity]` During a global peak traffic period, an enterprise integration receives the following JSON error body:
+```json
+{
+  "type": "error",
+  "error": {
+    "type": "overloaded_error",
+    "message": "Anthropic's API is temporarily overloaded"
+  }
+}
+```
+Inspection confirms the client organization has consumed only 10% of its monthly quota. What is the root cause and correct recovery strategy?
+
+A. The client account's payment method failed, requiring an immediate billing update in the management console.
+B. The client payload contained corrupt UTF-8 bytes, requiring payload serialization fixes in client code.
+C. Anthropic's hosting infrastructure is saturated; retry using exponential backoff with jitter.
+D. The API key was revoked by an administrator and must be regenerated from the enterprise security portal.
+
+---
+
+**41.** `[task 2.3 · claude api mechanics: http 400 tool_result schema mismatch]` Claude invokes an external database query tool with ID `toolu_01A99Z`. The client application executes the SQL query and responds with the following message payload:
+```json
+{
+  "role": "user",
+  "content": [
+    {
+      "type": "tool_result",
+      "content": "{\"status\": \"active\", \"balance\": 450.00}"
+    }
+  ]
+}
+```
+What error does the Messages API return, and what is the fix?
+
+A. HTTP `429 RateLimitError`; the client must increase its tool execution rate limit allocation in the console.
+B. HTTP `529 OverloadedError`; the client must retry after a random jitter delay interval across endpoints.
+C. HTTP `400 InvalidRequestError` because `tool_use_id` is missing; the client must supply `"tool_use_id": "toolu_01A99Z"`.
+D. HTTP `200 OK`; the API automatically matches the result to the most recent assistant tool call in history.
+
+
