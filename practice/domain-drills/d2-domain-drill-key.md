@@ -167,3 +167,12 @@ it, misread the item, or picked the plausible-but-soft option.
 
 **41. C** — Every `tool_result` content block must contain the matching `tool_use_id` from the assistant's previous `tool_use` block; omitting this field causes the Messages API schema validator to reject the payload with an HTTP 400 `invalid_request_error`. *(task 2.3; concept: missing_tool_use_id_400; item `d2d-41`)*
 
+---
+
+**42. B** — When Claude returns multiple parallel tool calls in one turn, the application must respond with a single `role: "user"` message containing an array of all `tool_result` blocks; sending two consecutive `user` turns causes the SDK to raise `anthropic.BadRequestError` (HTTP 400). *(task 2.3; concept: parallel_tool_results_single_user_turn_400; item `d2d-42`)*
+
+---
+
+**43. C** — Tool execution errors must be communicated back to Claude by passing `"is_error": True` inside the `tool_result` content block; this allows Claude to reason about the failure (e.g. notify the user or try an alternative path) without aborting the dialogue loop or raising an API exception. *(task 2.4; concept: tool_result_is_error_flag; item `d2d-43`)*
+
+

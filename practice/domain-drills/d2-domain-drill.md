@@ -425,4 +425,36 @@ B. HTTP `529 OverloadedError`; the client must retry after a random jitter delay
 C. HTTP `400 InvalidRequestError` because `tool_use_id` is missing; the client must supply `"tool_use_id": "toolu_01A99Z"`.
 D. HTTP `200 OK`; the API automatically matches the result to the most recent assistant tool call in history.
 
+---
+
+**42.** `[task 2.3 · sdk exception classes & parallel tool result bundling]` In a financial assistant, Claude generates a response with `stop_reason: "tool_use"` containing two parallel tool calls: `toolu_FX01` (currency lookup) and `toolu_FX02` (tax calculation). The developer writes the following handler:
+```python
+client.messages.create(
+    model="claude-3-5-sonnet-20241022",
+    max_tokens=1024,
+    messages=[
+        *conversation_history,
+        assistant_turn,
+        {"role": "user", "content": [{"type": "tool_result", "tool_use_id": "toolu_FX01", "content": "1.35"}]},
+        {"role": "user", "content": [{"type": "tool_result", "tool_use_id": "toolu_FX02", "content": "0.08"}]}
+    ]
+)
+```
+Which Python SDK exception is raised when executing this code, and what is the required fix?
+
+A. `anthropic.RateLimitError` (429); the application must add a 500ms delay between the two user messages.
+B. `anthropic.BadRequestError` (400); the application must bundle both `tool_result` blocks into a single message with `role: "user"`.
+C. `anthropic.InternalServerError` (529); the Anthropic parallel processing router experienced a deadlocked queue state.
+D. `anthropic.APIConnectionError`; the underlying HTTP socket closed abruptly due to malformed header transmission.
+
+---
+
+**43.** `[task 2.4 · tool execution failures & is_error recovery]` An autonomous file management agent invokes a `read_disk_file` tool with ID `toolu_FILE99` to read `/var/log/audit.csv`. The tool execution fails on the host OS with `FileNotFoundError: No such file or directory`. How should the host application return this failure to Claude without terminating the conversation loop or triggering an API exception?
+
+A. Raise `anthropic.BadRequestError` in Python so the SDK automatically retries the file lookup with elevated permissions.
+B. Discard the assistant's turn entirely and restart the conversation loop from the first initial user prompt.
+C. Send a user message containing `{"type": "tool_result", "tool_use_id": "toolu_FILE99", "content": "Error: File /var/log/audit.csv not found", "is_error": True}`.
+D. Omit the `tool_result` block and prompt Claude with a plain-text message asking it to pick another tool.
+
+
 
