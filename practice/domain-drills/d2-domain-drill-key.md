@@ -175,4 +175,13 @@ it, misread the item, or picked the plausible-but-soft option.
 
 **43. C** — Tool execution errors must be communicated back to Claude by passing `"is_error": True` inside the `tool_result` content block; this allows Claude to reason about the failure (e.g. notify the user or try an alternative path) without aborting the dialogue loop or raising an API exception. *(task 2.4; concept: tool_result_is_error_flag; item `d2d-43`)*
 
+---
+
+**44. B** — In the Anthropic Python SDK, HTTP 429 maps to `anthropic.RateLimitError`; the try-except block catches this exception, inspects `e.response.headers.get("retry-after")` for the backoff duration, sleeps, and retries the request safely. *(task 2.3; concept: rate_limit_exception_handling; item `d2d-44`)*
+
+---
+
+**45. C** — The Anthropic Messages API schema requires system instructions to be passed via the top-level `system` parameter; placing `{"role": "system"}` inside the `messages` list is invalid and causes the SDK to raise `anthropic.BadRequestError` (HTTP 400). *(task 2.3; concept: system_role_in_messages_array_400; item `d2d-45`)*
+
+
 

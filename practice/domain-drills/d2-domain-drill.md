@@ -456,5 +456,48 @@ B. Discard the assistant's turn entirely and restart the conversation loop from 
 C. Send a user message containing `{"type": "tool_result", "tool_use_id": "toolu_FILE99", "content": "Error: File /var/log/audit.csv not found", "is_error": True}`.
 D. Omit the `tool_result` block and prompt Claude with a plain-text message asking it to pick another tool.
 
+---
+
+**44.** `[task 2.3 · python sdk exception handling & retry-after extraction]` A software engineer writes a resilient API wrapper around Claude 3.5 Sonnet to handle transient rate limits and server hiccups. The wrapper uses the following try-except block:
+```python
+try:
+    return client.messages.create(model="claude-3-5-sonnet-20241022", max_tokens=1024, messages=messages)
+except anthropic.RateLimitError as e:
+    wait_time = int(e.response.headers.get("retry-after", 10))
+    time.sleep(wait_time)
+    return client.messages.create(model="claude-3-5-sonnet-20241022", max_tokens=1024, messages=messages)
+except anthropic.BadRequestError as e:
+    logger.error(f"Payload validation failed: {e.message}")
+    raise
+```
+During a high-load event, the API responds with HTTP 429. What is the execution flow and outcome of this code?
+
+A. The `BadRequestError` block catches the 429 error and raises an unhandled exception to the main thread.
+B. The `RateLimitError` block catches the 429 status, extracts `retry-after`, sleeps, and retries.
+C. The SDK throws an `APIConnectionError` because HTTP 429 responses close the underlying TCP socket connection.
+D. The exception bypasses both blocks because rate limit errors inherit strictly from `InternalServerError`.
+
+---
+
+**45.** `[task 2.3 · claude api mechanics: role system in messages array]` A developer porting code from another model provider constructs the following request payload using the Python SDK:
+```python
+response = client.messages.create(
+    model="claude-3-5-sonnet-20241022",
+    max_tokens=1024,
+    messages=[
+        {"role": "system", "content": "You are an expert tax accountant."},
+        {"role": "user", "content": "Calculate dividend tax for $50,000."}
+    ]
+)
+```
+Which Python SDK exception is thrown upon executing this API call, and what is the required refactoring?
+
+A. `anthropic.AuthenticationError` (401); the developer must supply a system-level administrator API key token.
+B. `anthropic.InternalServerError` (500); the Anthropic backend engine crashed attempting to parse the role string.
+C. `anthropic.BadRequestError` (400); pass instructions to the top-level `system` parameter, not `messages`.
+D. `anthropic.RateLimitError` (429); system messages require double the default organization token allocation tier.
+
+
+
 
 
