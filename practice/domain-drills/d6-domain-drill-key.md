@@ -5,7 +5,7 @@ it, misread the item, or picked the plausible-but-soft option.
 
 ---
 
-**1. B** — Wrapping the reference material in `<context>` and the behavioral rules in `<instructions>` gives Claude a structural signal for which content is source data and which is a rule to follow, stopping the cross-contamination. Shortening the document just reduces its size without fixing the mixing; moving the whole block unchanged into a user turn keeps the same ambiguity; and asking Claude to disregard wording in a later turn is a patch that won't hold across new conversations. *(task 6.1; concept: xml_section_delimiting; item `d6d-01`)*
+**1. B** — Wrapping `return_policy_doc` in `<policy_docs>` and behavioral constraints in `<guidelines>` provides unambiguous structural demarcation in the prompt string, preventing context contamination. Shortening the document or appending stop sequences does not resolve the lack of structural demarcation. *(task 6.1; concept: xml_section_delimiting; item `d6d-01`)*
 
 ---
 
@@ -13,7 +13,8 @@ it, misread the item, or picked the plausible-but-soft option.
 
 ---
 
-**3. D** — Pre-filling the assistant turn with `{` forces the reply to continue as a JSON value from that exact character, eliminating the preface entirely. A stop sequence on the preface text only stops generation after it's already started being written; raising temperature makes phrasing less predictable, not more; and pushing cleanup work onto the client just works around a preventable server-side issue. *(task 6.1; concept: assistant_prefill; item `d6d-03`)*
+**3. D** — Appending `{"role": "assistant", "content": "{"}` as the final element of `messages` natively forces Claude to continue emitting JSON tokens from that opening character, bypassing any preamble. The application then parses `"{" + response.content[0].text`. Stop sequences, user prompt tricks, or invalid `"role": "system"` inside `messages` do not provide native assistant continuation. *(task 6.1; concept: assistant_prefill; item `d6d-03`)*
+
 
 ---
 

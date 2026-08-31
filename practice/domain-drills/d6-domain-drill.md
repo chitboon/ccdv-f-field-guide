@@ -9,12 +9,23 @@ sitting.
 
 ---
 
-**1.** `[task 6.1 · XML section delimiting]` A 4,000-word system prompt mixes a product return-policy reference document and behavioral instructions in one undifferentiated block of prose. Claude has started quoting return-policy line items back to customers as if they were rules the agent itself must obey. What restructuring most directly fixes this?
+**1.** `[task 6.1 · XML section delimiting]` A developer configures a customer support bot in Python. The system prompt currently concatenates reference documentation and behavioral guardrails in raw unformatted text:
 
-A. Shorten the reference document by roughly half so the combined system prompt consumes noticeably fewer tokens on every request.
-B. Wrap the reference document in `<context>` tags and the behavioral rules in `<instructions>` tags for clarity.
-C. Move the entire block, unchanged, from the system prompt into the first user turn of every single new conversation.
-D. Ask Claude in a later follow-up turn to disregard the return-policy wording it already quoted, going forward.
+```python
+system_prompt = f"""
+{return_policy_doc}
+You are a support agent for RetailCorp.
+Never issue refunds exceeding $100 without manager approval.
+Always maintain a courteous tone.
+"""
+```
+
+In production, Claude quotes policy clauses back to customers as if they were rigid operational commands the agent must follow. How should the developer refactor the `system_prompt` string to establish clear structural separation?
+
+A. Shorten `return_policy_doc` to under 500 tokens so total system prompt token length decreases.
+B. Wrap `return_policy_doc` in `<policy_docs>` and rules in `<guidelines>`, referencing them explicitly.
+C. Move `return_policy_doc` into `messages[0]["content"]` alongside the customer's question unformatted.
+D. Append a `stop_sequences=["Refund Policy"]` parameter inside the `client.messages.create()` payload.
 
 ---
 
@@ -27,21 +38,33 @@ D. Increase `max_tokens` so truncation can no longer plausibly be the cause of t
 
 ---
 
-**3.** `[task 6.1 · assistant message pre-fill]` A code-review bot must always reply with a raw JSON object and nothing else, but Claude keeps prefacing replies with "Here's the review:" before the JSON starts, breaking a downstream parser that expects the very first character to be `{`. Which technique addresses this directly?
+**3.** `[task 6.1 · assistant message pre-fill]` A developer writes a Python script to extract structured security review findings from code diffs:
 
-A. Add a stop sequence on the exact string "Here's the review:" so generation halts right before it gets written.
-B. Raise the sampling temperature so the model varies its phrasing and, with luck, eventually drops the preface.
-C. Ask the user to strip everything before the first `{` character in their own client-side parsing code, ticket by ticket.
-D. Start the assistant turn with the pre-filled text `{`, so the reply continues on as JSON.
+```python
+response = client.messages.create(
+    model="claude-3-5-sonnet-20241022",
+    max_tokens=1024,
+    system="Output only a raw JSON object with keys 'vulnerabilities' and 'severity'.",
+    messages=[{"role": "user", "content": f"Review diff:\n{code_diff}"}],
+)
+findings = json.loads(response.content[0].text)
+```
+
+In production, `json.loads()` intermittently raises `json.decoder.JSONDecodeError` because Claude outputs conversational preamble (`"Here is the security assessment in JSON:"`) before the `{`. What modification to the `messages` payload natively forces Claude to output pure JSON starting at character 1?
+
+A. Set `temperature=1.0` and append a `stop_sequences=["Here is the"]` parameter to the API request call.
+B. Pass `{"role": "user", "content": "Return JSON only: {"}` at the beginning of the `messages` array.
+C. Insert `{"role": "system", "content": "JSON_MODE=true"}` directly into the top of `messages` list.
+D. Pre-fill `{"role": "assistant", "content": "{"}` in `messages`, then parse `"{" + response.content[0].text`.
 
 ---
 
 **4.** `[task 6.1 · chain-of-thought for multi-step reasoning]` A prompt asks Claude to compute a multi-step loan eligibility decision (income ratio, credit history weight, and collateral value combined into one verdict) and return only the final approve/deny word. Reviewers notice the verdicts are inconsistent across near-identical applicants. What change is likely to improve reasoning consistency?
 
-A. Instruct Claude to reason through each factor step by step before stating the final verdict, rather than jumping straight to the word.
-B. Instruct Claude to skip explanation entirely and answer in a single token to save output cost.
-C. Lower `max_tokens` to 1 so the model is physically limited to just the verdict word.
-D. Replace the loan factors with a single combined numeric score computed outside the prompt.
+A. Instruct Claude to articulate intermediate reasoning inside `<thinking>` tags before outputting the verdict.
+B. Instruct Claude to skip explanation entirely and output a single bare verdict token to minimize cost.
+C. Set `max_tokens: 1` on the request so the model is physically constrained to emitting only one word.
+D. Combine the financial metrics into a pre-computed external formula passed directly in the user prompt.
 
 ---
 
@@ -56,10 +79,10 @@ D. The session has grown long enough to exceed the context window, pushing the o
 
 **6.** `[task 6.1 · negative instruction reframed positively]` A prompt tells Claude "do not use bullet points" for a narrative summary feature, yet outputs keep drifting back into bulleted lists whenever the input material itself contains lists. What phrasing adjustment is most likely to reduce this drift?
 
-A. Restate the identical negative instruction in stronger language, written in all capital letters, at the very end.
-B. Remove the instruction entirely and rely on the model's own default formatting choices for the summary.
-C. Replace the prohibition with a positive instruction describing the desired form, such as flowing prose paragraphs.
-D. Move the same instruction out of the system prompt and repeat it at the end of every single user message.
+A. Restate the negative instruction in stronger language, written in all capital letters at the very end.
+B. Remove the negative formatting rule entirely and rely on Claude's default paragraph formatting.
+C. Replace the prohibition with a positive instruction describing the desired flowing prose paragraphs.
+D. Move the negative constraint out of the system prompt and append it to every individual user turn.
 
 ---
 
@@ -74,10 +97,10 @@ D. Move the stable policy and tone content into the system prompt, leaving only 
 
 **8.** `[task 6.2 · long conversation context management]` A multi-hour support chat has grown to 80 turns. The team wants to keep the conversation running without hitting the context window limit, while making sure the original system instructions and the customer's opening problem statement stay available to the model. What approach fits both constraints?
 
-A. Summarize or drop the oldest middle turns, while retaining the system prompt and the conversation's opening turn fully intact.
-B. Truncate the system prompt itself once the turn count passes 50, since it is the largest fixed line-item cost.
-C. Start a brand-new conversation with no prior context every time the turn count crosses a fixed threshold.
-D. Send the full 80-turn history on every request and rely on a larger context-window model to absorb the growth.
+A. Summarize or drop middle turns while keeping the system prompt and opening turn intact.
+B. Truncate the system prompt itself once turn count passes 50 to reduce fixed token cost.
+C. Restart a brand-new conversation with no history whenever turn counts cross a threshold.
+D. Send the full 80-turn history on every request and rely on a larger context-window model.
 
 ---
 
@@ -92,19 +115,21 @@ D. As a `tool_result` block referencing a `tool_use_id` from an earlier turn, wi
 
 **10.** `[task 6.2 · reference material inside XML with instruction after]` A research assistant prompt pastes three long PDFs' extracted text directly above the user's question, with no tags marking where the documents end and the question begins. Claude sometimes answers a question that was actually a sentence lifted from inside one of the documents. What structural fix addresses this?
 
-A. Delete two of the three source documents entirely so only one remains available to get confused with the question.
-B. Move the question up into the system prompt so it gets processed before any of the document text.
-C. Ask the user to retype their question in all capital letters so that it visually stands out from the rest.
-D. Wrap each document in `<document>` tags and place the actual user question, clearly marked, after the closing tags.
+A. Delete two of the three PDF documents entirely so fewer background sentences can cause prompt confusion.
+B. Relocate the user's question into the system prompt string rather than inside the user message.
+C. Format the user's question in all capital letters so the model prioritizes it visually across turns.
+D. Wrap each source in `<document>` tags and place the user question after the closing tags.
+
+
 
 ---
 
-**11.** `[task 6.3 · tool use for reliable parsing over string matching]` A pipeline currently asks Claude to answer with the word "APPROVED" or "REJECTED" as free text, then a downstream script does `if "APPROVED" in response`. This misfires when Claude writes an explanation that happens to contain the word "REJECTED" while ultimately approving the request. What is the more robust fix?
+**11.** `[task 6.3 · tool use for reliable parsing over string matching]` A financial compliance workflow needs Claude to evaluate a transaction and return whether it is approved, flagged for AML review, or denied. The current prompt asks for the word "APPROVED", "FLAGGED", or "DENIED" in the response, but downstream string parsing frequently breaks when Claude includes explanatory remarks or slight typos. What is the most reliable way to enforce this structured verdict?
 
-A. Define a tool with a strict schema, such as a boolean `approved` field, so the verdict is parsed from call arguments.
-B. Tell Claude to only ever write the single word "APPROVED" or "REJECTED" with absolutely nothing else in the reply.
-C. Switch the string match to check `response.startswith("APPROVED")` instead of a substring search anywhere in the text.
-D. Ask Claude to wrap its verdict word in double asterisks so the script can search for `**APPROVED**` instead of plain text.
+A. Define a tool with a strict enum parameter for the decision and configure `tool_choice` to require its invocation.
+B. Add a post-processing regex that searches for the first occurrence of the three keywords anywhere in the output string.
+C. Set `max_tokens: 1` so Claude has only enough output budget to emit the first letter of the verdict word.
+D. Wrap the request in a retry loop that resubmits the prompt whenever the returned string fails an exact equality match.
 
 ---
 
@@ -114,3 +139,4 @@ A. Retry the same tool call automatically up to five times whenever any returned
 B. Validate the tool's returned arguments against the schema, checking type and required fields, right after the call returns.
 C. Log the raw JSON response to a file so a human can review it manually once a week during a routine check.
 D. Increase the model's `max_tokens` so the tool call has more room to fully complete its output.
+
