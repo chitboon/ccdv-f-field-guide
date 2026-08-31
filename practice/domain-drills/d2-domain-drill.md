@@ -54,12 +54,12 @@ D. Omitting `tool_choice` and relying on the system prompt.
 
 ---
 
-**6.** `[task 2.3 · Batch API lifecycle]` A data pipeline submits 40,000 document-classification requests through the Message Batches API at 9:00 AM. At 9:05 AM, the pipeline's status check calls the batch `ended` and attempts to download results from `results_url`, which returns a 404. What is the most likely cause?
+**6.** `[task 2.3 · Batch API lifecycle]` A data pipeline submits 40,000 document-classification requests through the Message Batches API at 9:00 AM. At 9:05 AM, an automated worker retrieves the batch status, notes `processing_status: "in_progress"`, and immediately attempts to download the output JSONL file from the endpoint, receiving a 404 response. What is the root cause of this error?
 
-A. The batch job failed permanently and must be resubmitted.
-B. The Batch API does not support 40,000 requests in a single job.
-C. `results_url` is only available once the batch has actually reached `ended`, not while it is still `in_progress` — the pipeline checked too early.
-D. `results_url` requires a separate authentication token from the main API key.
+A. The batch exceeded Anthropic's per-job payload ceiling and was dropped from the execution queue.
+B. The client application must provide an auxiliary S3 presigned URL to receive batches exceeding 10,000 requests.
+C. Result URLs are only provisioned once `processing_status` transitions to `ended` after processing finishes.
+D. The API key used for batch retrieval lacks read permissions for the batch results storage bucket.
 
 ---
 
@@ -72,30 +72,31 @@ D. `AsyncAnthropic()` with `async with client.messages.stream(...) as stream: as
 
 ---
 
-**8.** `[task 2.4 · idempotency]` A payment agent's `charge_customer` tool has no idempotency key. During a network blip, the client times out waiting for a response and retries the same tool call. The customer is charged twice. What software-engineering principle, applied to the tool's design, would have prevented this?
+**8.** `[task 2.4 · tool mutation safety & network retries]` A banking assistant executes a `transfer_funds` tool that debits an account. During a network timeout, the client application fails to receive the completion confirmation and automatically resends the tool call, resulting in a duplicate debit. What software engineering design pattern directly prevents duplicate side effects during automatic retries?
 
-A. Increasing the client's request timeout so retries happen less often after a network blip.
-B. Making the tool idempotent via a deduplicated request ID.
-C. Reducing the agent's `max_tokens` so tool calls are generated and sent faster than the network can time out.
-D. Adding a confirmation step where the user has to re-type the exact charge amount before it's sent.
-
----
-
-**9.** `[task 2.4 · statelessness across instances]` A team builds a Claude-powered chatbot where each backend server instance keeps the full conversation history for logged-in users in that instance's local memory. When the load balancer routes a user's next message to a different server instance, the bot has no memory of the prior turns. What design flaw caused this?
-
-A. The system prompt was too short to hold enough of the earlier conversation's context.
-B. The team used the wrong Claude model for a genuinely multi-turn conversation.
-C. Conversation state was kept in-process, breaking statelessness across instances.
-D. `temperature` was set too high, so each instance's replies came out inconsistent with the others.
+A. Requiring the tool handler to validate client-supplied deduplication keys before executing mutations.
+B. Increasing the client-side socket read timeout threshold from 30 seconds to 120 seconds.
+C. Implementing exponential backoff on all tool execution exceptions thrown by the database driver.
+D. Restricting the agent's tool access by removing the tool after the first invocation in a session.
 
 ---
 
-**10.** `[task 2.4 · centralized configuration]` A team hardcodes `model="claude-3-5-sonnet-20241022"` directly in 40 different call sites across their codebase. When they need to test a newer model snapshot, they must find and edit all 40 locations, and two are missed, leaving the app running two different model versions in production. What practice would have prevented this?
+**9.** `[task 2.4 · multi-instance state management]` An enterprise deploys a Claude customer support agent across a fleet of 10 auto-scaling container instances behind an Application Load Balancer. Users report that the assistant frequently loses context and restarts conversations mid-dialogue whenever their requests route to different containers. Which architectural refactoring permanently resolves this context loss?
 
-A. Centralizing the model identifier in one configuration value that all call sites reference.
-B. Increasing `max_tokens` at each call site to compensate for model differences.
-C. Adding more unit tests for each of the 40 call sites.
-D. Switching from the model name string to the model's numeric parameter count.
+A. Enabling cookie-based sticky sessions on the load balancer to bind each user's IP to a specific container instance.
+B. Externalizing conversation history to a centralized database and re-injecting the message array on each request.
+C. Increasing container memory allocations so each worker can retain larger in-process dialogue histories.
+D. Injecting the full conversation history into a static system prompt prefix cached across local processes.
+
+---
+
+**10.** `[task 2.4 · centralized configuration management]` A team hardcodes `model="claude-3-5-sonnet-20241022"` directly inside 40 different microservice handler functions. During a planned upgrade to Claude 3.7 Sonnet, engineers miss three call sites, resulting in silent version drift across production services. Which design pattern avoids this vulnerability?
+
+A. Defining model identifiers in a centralized configuration registry loaded dynamically at application initialization.
+B. Writing parameterized integration tests for every individual call site to detect string mismatches at build time.
+C. Configuring a reverse proxy that intercepts outbound API calls and rewrites model string headers.
+D. Passing the model selection parameter as an optional property within user-facing prompt payloads.
+
 
 ---
 

@@ -25,7 +25,7 @@ it, misread the item, or picked the plausible-but-soft option.
 
 ---
 
-**6. C** — `results_url` only populates once the batch has actually reached `ended`; checking 5 minutes in for a 40,000-item job almost certainly caught it still `in_progress`. Nothing in the scenario indicates permanent failure, an item-count limit, or a separate auth requirement. *(task 2.3; concept: batch_lifecycle_results_url; item `d2d-06`)*
+**6. C** — Result files are only provisioned on Anthropic's storage backend once `processing_status` transitions to `ended`; querying 5 minutes in while the batch is still `in_progress` causes result download requests to return a 404. *(task 2.3; concept: batch_lifecycle_results_url; item `d2d-06`)*
 
 ---
 
@@ -33,15 +33,16 @@ it, misread the item, or picked the plausible-but-soft option.
 
 ---
 
-**8. B** — A unique, deduplicated request ID makes the retried call a no-op instead of a second charge — that's what idempotency means here. A longer timeout just delays the same failure mode; `max_tokens` and a user-facing confirmation don't address the retry itself. *(task 2.4; concept: tool_idempotency; item `d2d-08`)*
+**8. A** — In mutation tools (such as fund transfers), validating client-supplied deduplication/idempotency keys ensures duplicate retry calls return the existing transaction record rather than executing a second debit. Socket timeouts and backoff retry delays do not eliminate the root cause of duplicate executions. *(task 2.4; concept: tool_idempotency_keys; item `d2d-08`)*
 
 ---
 
-**9. C** — Keeping history in one instance's local memory breaks the moment the load balancer routes elsewhere; the fix is a shared store the whole fleet can read, not anything about the system prompt, the model choice, or `temperature`. *(task 2.4; concept: statelessness_across_instances; item `d2d-09`)*
+**9. B** — In horizontally scaled cloud fleets, dialogue history must be externalized to a shared state store (e.g. Redis, DynamoDB) so any container instance can retrieve and re-hydrate the full message context on incoming requests. Sticky sessions are fragile to container crashes and scaling events. *(task 2.4; concept: externalized_state_across_instances; item `d2d-09`)*
 
 ---
 
-**10. A** — One centralized configuration value means updating the model version is a one-line change instead of a 40-site hunt where two get missed. Unit tests wouldn't have caught the missed edits any faster, and `max_tokens` or the model identifier's format aren't the actual problem. *(task 2.4; concept: centralized_model_config; item `d2d-10`)*
+**10. A** — Defining model strings in a centralized configuration module or registry guarantees that updating the model version is an atomic, single-line change referenced uniformly across all call sites, eliminating multi-site drift. *(task 2.4; concept: centralized_model_configuration; item `d2d-10`)*
+
 
 ---
 
