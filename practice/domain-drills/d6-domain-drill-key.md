@@ -51,3 +51,16 @@ it, misread the item, or picked the plausible-but-soft option.
 ---
 
 **12. B** — Validating the returned arguments against the schema right after the call catches a malformed type like a string `"null"` immediately, with a clear error, instead of letting it flow downstream to fail opaquely later. Automatic retries don't address a response that returns successfully but with the wrong type; logging for a weekly human review doesn't stop the bad value from being used in the meantime; and raising `max_tokens` has no bearing on whether a returned field has the correct type. *(task 6.3; concept: structured_output_validation; item `d6d-12`)*
+
+---
+
+**13. C** — Static documentation belongs in the top-level `system` parameter structured as a content block with `cache_control: {"type": "ephemeral"}`. This establishes a stable prefix that receives a 90% read discount after turn 1, while keeping the `messages` array clean. Retaining static policies inside dynamic user turns violates prompt caching prefix matching and wastes input tokens. *(task 6.2; concept: system_prompt_caching_sdk; item `d6d-13`)*
+
+---
+
+**14. A** — Setting `tool_choice={"type": "tool", "name": "record_triage_decision"}` deterministically compels Claude to generate structured tool arguments for that exact named tool, eliminating free-form conversational prose. `{"type": "any"}` forces *a* tool but does not isolate a specific named tool, and system prompt text reminders remain probabilistic. *(task 6.3; concept: tool_choice_named_forcing_sdk; item `d6d-14`)*
+
+---
+
+**15. B** — In production tool loops, application code must validate `block.input` using a schema validator (such as Pydantic). When a `ValidationError` occurs, returning `{"type": "tool_result", "tool_use_id": block.id, "content": str(e), "is_error": True}` allows Claude to see the validation violation, reason over the error, and self-correct on the subsequent turn. *(task 6.3; concept: defensive_pydantic_tool_validation; item `d6d-15`)*
+

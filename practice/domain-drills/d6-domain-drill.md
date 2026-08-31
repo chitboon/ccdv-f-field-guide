@@ -140,3 +140,95 @@ B. Validate the tool's returned arguments against the schema, checking type and 
 C. Log the raw JSON response to a file so a human can review it manually once a week during a routine check.
 D. Increase the model's `max_tokens` so the tool call has more room to fully complete its output.
 
+---
+
+**13.** `[task 6.2 · system prompt separation with prompt caching in SDK]` A developer builds a multi-turn support assistant with 15,000 tokens of static policy documentation:
+
+```python
+system_policy = load_company_policies()  # ~15,000 tokens of static rules
+
+def handle_user_message(history: list[dict], user_input: str) -> str:
+    messages = history + [{"role": "user", "content": f"{system_policy}\n\nUser Question: {user_input}"}]
+    response = client.messages.create(
+        model="claude-3-5-sonnet-20241022",
+        max_tokens=1024,
+        messages=messages,
+    )
+    return response.content[0].text
+```
+
+As dialogue turns accumulate, latency and token costs explode because `system_policy` is re-sent in every `user` turn. Which refactoring achieves maximum token efficiency and latency reduction?
+
+A. Pass `system_policy` into top-level system parameter and duplicate it in every user turn as an explicit fallback.
+B. Compress `system_policy` using zlib and instruct Claude to decode it dynamically within a custom tool execution.
+C. Set `system=[{"type": "text", "text": system_policy, "cache_control": {"type": "ephemeral"}}]` and clean `messages`.
+D. Retain `system_policy` inside the user turn but set `cache_control: {"type": "ephemeral"}` on volatile message turns.
+
+---
+
+**14.** `[task 6.3 · structured output extraction via tool_choice forcing in SDK]` A developer builds an automated triage pipeline that must extract entities from support emails into a typed schema:
+
+```python
+tools = [
+    {
+        "name": "record_triage_decision",
+        "description": "Record triage category and urgency rating.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "category": {"type": "string", "enum": ["billing", "technical", "security"]},
+                "urgency": {"type": "integer", "minimum": 1, "maximum": 5}
+            },
+            "required": ["category", "urgency"]
+        }
+    }
+]
+
+response = client.messages.create(
+    model="claude-3-5-sonnet-20241022",
+    max_tokens=512,
+    tools=tools,
+    messages=[{"role": "user", "content": email_text}],
+    tool_choice={"type": "auto"}
+)
+```
+
+In production, Claude occasionally outputs conversational analysis in prose instead of calling `record_triage_decision`. Which configuration change deterministically guarantees that Claude executes the extraction tool?
+
+A. Set `tool_choice={"type": "tool", "name": "record_triage_decision"}` to enforce calling that exact tool signature.
+B. Set `tool_choice={"type": "any"}` to require a tool call, and define a secondary regex parser for free-form prose.
+C. Append `"Invoke record_triage_decision exclusively"` to the user message while leaving `tool_choice` set to `"auto"`.
+D. Set `temperature=0.0` on the API call and remove parameter descriptions from `input_schema` to reduce token spread.
+
+---
+
+**15.** `[task 6.3 · defensive validation of structured tool inputs in Python]` An agent executes bank wire transfers via a tool call. The application defines a Pydantic schema for validation:
+
+```python
+from pydantic import BaseModel, Field, ValidationError
+
+class WireTransferSchema(BaseModel):
+    recipient_iban: str = Field(min_length=15, max_length=34)
+    amount_cents: int = Field(gt=0)
+    currency: str = Field(pattern="^[A-Z]{3}$")
+
+def process_agent_turn(messages: list[dict]) -> dict:
+    response = client.messages.create(
+        model="claude-3-5-sonnet-20241022",
+        max_tokens=1024,
+        tools=[wire_tool_def],
+        messages=messages
+    )
+    for block in response.content:
+        if block.type == "tool_use":
+            # Validation logic
+```
+
+When `block.type == "tool_use"` arrives, how should the application validate arguments and handle schema violations defensively?
+
+A. Execute transfer queries directly and catch database driver constraint exceptions inside backend persistence code.
+B. Validate `block.input` via `WireTransferSchema` and return a `tool_result` with `is_error=True` if `ValidationError` is raised.
+C. Catch `ValidationError` and immediately raise an unhandled exception to terminate the Python application runtime.
+D. Silently coerce invalid argument values to hardcoded fallback defaults before invoking the financial transaction.
+
+
