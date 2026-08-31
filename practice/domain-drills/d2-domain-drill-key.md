@@ -184,5 +184,33 @@ it, misread the item, or picked the plausible-but-soft option.
 
 **45. C** — The Anthropic Messages API schema requires system instructions to be passed via the top-level `system` parameter; placing `{"role": "system"}` inside the `messages` list is invalid and causes the SDK to raise `anthropic.BadRequestError` (HTTP 400). *(task 2.3; concept: system_role_in_messages_array_400; item `d2d-45`)*
 
+---
+
+**46. D** — Written, stakeholder-signed-off requirements defining scope and thresholds are what would have caught the ambiguity in "the easy ones" before implementation, not after legal found the problem. More `max_tokens`, a stricter system prompt, and a quarterly retrospective are all downstream patches that don't address the missing sign-off itself. *(task 2.1; concept: requirements_signoff_traceability; item `d2d-46`)*
+
+---
+
+**47. C** — A prioritized scope separating must-have launch capabilities from later-phase nice-to-haves is what lets a team ship something in three weeks instead of nothing; without it, all 40 items get equal priority and none finish in time. A bigger team, a broader system prompt, or a longer `max_tokens` limit don't substitute for actually prioritizing the backlog. *(task 2.1; concept: mvp_scope_prioritization; item `d2d-47`)*
+
+---
+
+**48. A** — Treating the prompt as versioned, reviewed source code — committed with history and rollback — is what would have let the team see and revert the exact change that broke production tone. A bigger text field, single-owner access, and spell-checking don't provide the audit trail or rollback path the incident actually needed. *(task 2.4; concept: prompt_as_versioned_code; item `d2d-48`)*
+
+---
+
+**49. B** — A circuit breaker stops calling a service after repeated failures and fails fast until it recovers, which is exactly what prevents the agent from continuing to hammer a warehouse service that's already known to be down. More `max_tokens`, a faster model, and permanently removing the tool don't address the retry-storm behavior itself. *(task 2.4; concept: circuit_breaker_pattern; item `d2d-49`)*
+
+---
+
+**50. D** — Falling back to a simpler, non-Claude search path when the API is unavailable keeps the feature partially working instead of going completely blank during an outage the underlying database isn't even affected by. Retrying rapidly, pre-caching every possible answer, and raising `max_tokens` don't restore search during an actual API outage. *(task 2.5; concept: graceful_degradation_api_unavailable; item `d2d-50`)*
+
+---
+
+**51. C** — A second Claude call that scores the draft against a rubric and triggers a revision loop until it clears a bar is what adds an automatic quality gate before a human ever sees the output — the evaluator-optimizer pattern applied at the application-design level. Lower temperature, a duplicate draft request, and more `max_tokens` don't add any actual quality check. *(task 2.5; concept: evaluator_optimizer_app_design; item `d2d-51`)*
+
+---
+
+**52. D** — Breaking the request into a short sequence of one-question-at-a-time turns is what typically improves completion versus one long combined ask, since it lowers the perceived effort of each individual reply. More `max_tokens`, lower temperature, and a `stop_sequence` tied to field count don't change the conversational structure users are abandoning. *(task 2.5; concept: multistep_conversational_flow; item `d2d-52`)*
+
 
 

@@ -1,11 +1,11 @@
 # CCDV-F Domain Drill — Domain 2: Applications and Integration
 
-36 items, one correct answer each. Untimed. Answer all 36 first, then grade
+52 items, one correct answer each. Untimed. Answer all 52 first, then grade
 against the key in one pass — item by item, reading each rationale,
 including the ones you got right. This is a scenario-based drill, not a
 recall check: every stem carries a concrete situation you must reason about.
-Suggested sittings: 1-9, 10-18, 19-27, 28-36 (four ~10-minute sessions), or
-1-18 then 19-36 if you'd rather do two longer sessions.
+Suggested sittings: 1-9, 10-18, 19-27, 28-36, 37-45, 46-52 (six ~10-minute
+sessions), or any grouping of 5-9 items per sitting.
 
 ---
 
@@ -481,6 +481,7 @@ D. The exception bypasses both blocks because rate limit errors inherit strictly
 ---
 
 **45.** `[task 2.3 · claude api mechanics: role system in messages array]` A developer porting code from another model provider constructs the following request payload using the Python SDK:
+
 ```python
 response = client.messages.create(
     model="claude-3-5-sonnet-20241022",
@@ -497,6 +498,69 @@ A. `anthropic.AuthenticationError` (401); the developer must supply a system-lev
 B. `anthropic.InternalServerError` (500); the Anthropic backend engine crashed attempting to parse the role string.
 C. `anthropic.BadRequestError` (400); pass instructions to the top-level `system` parameter, not `messages`.
 D. `anthropic.RateLimitError` (429); system messages require double the default organization token allocation tier.
+
+---
+
+**46.** `[task 2.1 · requirements sign-off and traceability]` A team builds a claims-processing agent based on a two-line email from a stakeholder: "automate the easy ones." Three months in, legal discovers the agent has been auto-approving claims above the threshold that requires manual review, because nobody had confirmed in writing what "easy" meant or which claims were in scope. What process step was missing?
+
+A. A larger `max_tokens` budget so the agent could explain its reasoning behind each individual auto-approval decision.
+B. A stricter system prompt reminding the agent to be conservative when approving claims.
+C. A retrospective review of approved claims, conducted quarterly instead of monthly.
+D. Written, stakeholder-signed-off requirements defining scope and thresholds before implementation began.
+
+---
+
+**47.** `[task 2.1 · MVP scope prioritization]` A startup's first release of a support agent is scheduled for launch in three weeks. The backlog lists 40 desired capabilities, including handling five languages and integrating with two third-party CRMs. With no prioritization applied, the team starts building all 40 at once and ships nothing by the deadline. What was missing from requirements planning?
+
+A. A larger engineering team assigned to the project so more capabilities could be built in parallel before launch.
+B. A single system prompt broad enough to cover all 40 capabilities without needing to prioritize among them.
+C. A prioritized scope distinguishing must-have launch capabilities from later-phase nice-to-haves.
+D. A longer `max_tokens` limit so each response could address more capabilities within one turn.
+
+---
+
+**48.** `[task 2.4 · prompt changes as reviewed, versioned code]` An engineer edits the production system prompt directly in a text field inside an internal admin dashboard, with no code review, no version history, and no way to see who changed what. After an edit breaks the agent's tone in production, nobody can identify what the prompt looked like an hour earlier. What software-engineering discipline was missing?
+
+A. Treating the prompt as versioned code, committed with history and rollback.
+B. Increasing the dashboard's `max_tokens` field limit so longer prompts could be entered without ever truncating them.
+C. Restricting dashboard access to a single named engineer so only one person could ever make changes.
+D. Running the prompt through a spell-checker before saving it in the dashboard field.
+
+---
+
+**49.** `[task 2.4 · circuit breaker for a failing downstream service]` An agent's `check_inventory` tool calls a downstream warehouse service that has started timing out on every request during an outage. The agent keeps retrying the same failing call on every user turn for the next twenty minutes, adding multi-second delays to every response even though the service shows no sign of recovering. What pattern stops the agent from continuing to hammer a service that's already known to be down?
+
+A. Increasing `max_tokens` so the agent has considerably more room to describe each timeout to the user in careful detail.
+B. A circuit breaker that stops calling the failing service after repeated failures and fails fast until it recovers.
+C. Switching the agent to a faster model so each retry attempt completes sooner.
+D. Removing the `check_inventory` tool from the agent permanently after the first timeout occurs.
+
+---
+
+**50.** `[task 2.5 · graceful degradation when the API is unavailable]` A retailer's product-search feature calls the Claude API to generate natural-language answers about inventory. During a regional Anthropic outage, every request fails, and the storefront's search bar goes completely blank with no results at all, even though the underlying inventory database is still fully operational. What design choice would have avoided a total feature outage?
+
+A. Retrying the failed API call ten times in rapid, immediate succession before ever giving up on a single search.
+B. Caching every possible natural-language answer in advance so no live API call is ever needed at all.
+C. Increasing `max_tokens` on search requests so responses complete before any timeout is reached.
+D. Falling back to a simpler, non-Claude search path when the API is unavailable.
+
+---
+
+**51.** `[task 2.5 · evaluator-optimizer as an application design choice]` A marketing-copy application has Claude draft a headline in one call, then wants to automatically improve weak drafts before showing anything to the human copywriter, rather than showing every first attempt regardless of quality. Which design adds that automatic quality check into the application before a human ever sees the output?
+
+A. Lowering `temperature` on the drafting call so every headline comes out more conservative and predictable.
+B. Sending the same drafting prompt to the model twice and keeping whichever draft is returned first.
+C. A second Claude call that scores the draft against a rubric and triggers a revision loop until it clears a bar.
+D. Increasing `max_tokens` so the drafting call can write a longer, more detailed headline.
+
+---
+
+**52.** `[task 2.5 · multi-step conversational flow design]` An onboarding agent presents new users with a single message asking for their name, company, role, team size, and budget all at once, in one long form-like prompt. Completion rates are low, and support tickets show users abandoning mid-reply because the message feels overwhelming. What conversational design change is most likely to improve completion?
+
+A. Increasing `max_tokens` so the single combined message can include more encouraging language.
+B. Lowering `temperature` so the single combined message is phrased more consistently across users.
+C. Adding a `stop_sequence` so the agent stops generating once all five fields are mentioned.
+D. Breaking the request into a short sequence of one-question-at-a-time turns instead of one long combined ask.
 
 
 
