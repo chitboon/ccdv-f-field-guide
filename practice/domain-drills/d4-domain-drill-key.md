@@ -25,4 +25,20 @@ it, misread the item, or picked the plausible-but-soft option.
 
 ---
 
-**6. D** — Without the request, response, and intermediate tool calls recorded per transaction, an aggregate error count can flag that something failed but never says what happened inside that one call. A lower alert threshold, longer retention, or an extra dashboard panel all still operate on the same aggregate counts and add no transaction-level detail. *(task 4.1; concept: production_observability_logging; item `d4d-06`)*
+**6. D** — Logging the full request, response, and intermediate tool calls per transaction produces a complete audit trail that makes intermittent failures diagnosable after the fact. Dashboard panels, lower alert thresholds, and longer retention windows only display aggregate statistics and cannot reveal the specific payload or failure mode of an individual transaction. *(task 4.1; concept: production_observability_logging; item `d4d-06`)*
+
+---
+
+**7. A** — Model-as-a-Judge evaluators are susceptible to verbosity bias (favoring longer answers); explicitly anchoring rubric criteria to penalize fluff and reward concise factual density calibrates scoring behavior. Eliminating the LLM judge discards semantic grading; hardcoding `max_tokens=50` truncates valid outputs; and switching model size does not fix rubric formulation. *(task 4.1; concept: llm_judge_verbosity_bias; item `d4d-07`)*
+
+---
+
+**8. B** — Using an LLM with few-shot adversarial prompts to generate synthetic variations (typos, colloquialisms, edge cases) proactively hardens the golden dataset against real-world distributions before deployment. Waiting for production failures exposes users to bugs; duplicating clean rows adds no diversity; and radio buttons eliminate conversational flexibility. *(task 4.1; concept: synthetic_edge_case_generation; item `d4d-08`)*
+
+---
+
+**9. D** — Plotting an Accuracy vs. Cost/Latency Pareto frontier on the golden dataset provides an objective trade-off curve to determine if accuracy improvements justify additional latency and token expenditure. Memory benchmarks ignore model accuracy; direct production deployment risks customer churn and unbudgeted costs; and local laptop tests lack statistical validity. *(task 4.1; concept: pareto_tradeoff_benchmarking; item `d4d-09`)*
+
+---
+
+**10. A** — Running automated multi-turn synthetic dialogues with per-turn JSON schema assertions validates format stability across multi-step conversations, catching late-turn format drift before production deployment. Higher temperatures increase randomness; single-turn manual inspection is blind to multi-turn degradation; and eliminating multi-turn flows breaks conversational UX. *(task 4.1; concept: multiturn_format_drift_testing; item `d4d-10`)*
