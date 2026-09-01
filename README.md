@@ -30,17 +30,17 @@ An official-grade, community-maintained field guide and practice suite for the *
    - **[API & LLM Diagnostic Quiz](practice/diagnostic-quiz/ccdv-f-diagnostic-quiz.md)** (15 items)
    - **[Phase 1 Concept Drills](practice/concept-drills/ccdv-f-concept-drills.md)** (53 items)
    - **[Phase 2 Scenario Domain Drills](practice/scenario-drills/ccdv-f-scenario-drills.md)** (53 items)
-   - **Domain Drills (rebuilt, scenario-based, sealed key)** — 2× exam volume per domain (112 items total):
+   - **Domain Drills (rebuilt, scenario-based, sealed key)** — 2×+ exam volume per domain (131 items total):
      [D1](practice/domain-drills/d1-domain-drill.md) (16) ·
-     [D2](practice/domain-drills/d2-domain-drill.md) (36) ·
+     [D2](practice/domain-drills/d2-domain-drill.md) (52) ·
      [D3](practice/domain-drills/d3-domain-drill.md) (6) ·
      [D4](practice/domain-drills/d4-domain-drill.md) (6) ·
      [D5](practice/domain-drills/d5-domain-drill.md) (18) ·
-     [D6](practice/domain-drills/d6-domain-drill.md) (12) ·
+     [D6](practice/domain-drills/d6-domain-drill.md) (15) ·
      [D7](practice/domain-drills/d7-domain-drill.md) (8) ·
      [D8](practice/domain-drills/d8-domain-drill.md) (10)
-   - **[Full Mock Exam 1 (Diagnostic Paper)](practice/mocks/mock-1.md)** (53 items)
-   - **[Full Mock Exam 2 (Timed Paper)](practice/mocks/mock-2.md)** (53 items)
+   - **[Full Mock Exam 1 (blueprint-exact, sealed key)](practice/mocks/mock-1.md)** (53 items, 8 multi-response)
+   - **[Full Mock Exam 2 (blueprint-exact, sealed key)](practice/mocks/mock-2.md)** (53 items, 8 multi-response)
 3. **Automated Quality & Provenance Gate Tools**:
    - `python3 tools/check-item-quality.py` — Evaluates position balance (chi-square), longest run (≤ 3), answer length ratio, and rank spread.
    - `python3 tools/check-provenance.py` — Provenance scanner ensuring 100% original rephrasings.
@@ -56,14 +56,14 @@ Run item quality validation across all practice sets:
 python3 tools/check-item-quality.py \
   practice/diagnostic-quiz/ccdv-f-diagnostic-quiz.md \
   practice/concept-drills/ccdv-f-concept-drills.md \
-  practice/scenario-drills/ccdv-f-scenario-drills.md \
-  practice/mocks/mock-1.md \
-  practice/mocks/mock-2.md
+  practice/scenario-drills/ccdv-f-scenario-drills.md
 ```
 
-The `domain-drills/` sets use a sealed-key format (answers in a separate `*-key.md` file, not inline) and must be checked one set at a time with `--key`, e.g.:
+The `domain-drills/` sets and both mocks use a sealed-key format (answers in a separate `*-key.md` file, not inline) and must be checked one set at a time with `--key`, e.g.:
 
 ```bash
+python3 tools/check-item-quality.py practice/mocks/mock-1.md \
+  --key practice/mocks/mock-1-key.md
 python3 tools/check-item-quality.py practice/domain-drills/d2-domain-drill.md \
   --key practice/domain-drills/d2-domain-drill-key.md
 ```
