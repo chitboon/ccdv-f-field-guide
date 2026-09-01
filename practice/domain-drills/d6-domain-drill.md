@@ -142,93 +142,68 @@ D. Increase the model's `max_tokens` so the tool call has more room to fully com
 
 ---
 
-**13.** `[task 6.2 · system prompt separation with prompt caching in SDK]` A developer builds a multi-turn support assistant with 15,000 tokens of static policy documentation:
+**13.** `[task 6.3 · stop_sequences for output boundary control]` A developer builds a sentiment-classification endpoint that must return only a single word — `positive`, `negative`, or `neutral` — with no trailing explanation, despite explicit prose instructions telling Claude not to add one. The developer changes the request to:
 
 ```python
-system_policy = load_company_policies()  # ~15,000 tokens of static rules
-
-def handle_user_message(history: list[dict], user_input: str) -> str:
-    messages = history + [{"role": "user", "content": f"{system_policy}\n\nUser Question: {user_input}"}]
-    response = client.messages.create(
-        model="claude-3-5-sonnet-20241022",
-        max_tokens=1024,
-        messages=messages,
-    )
-    return response.content[0].text
-```
-
-As dialogue turns accumulate, latency and token costs explode because `system_policy` is re-sent in every `user` turn. Which refactoring achieves maximum token efficiency and latency reduction?
-
-A. Pass `system_policy` into top-level system parameter and duplicate it in every user turn as an explicit fallback.
-B. Compress `system_policy` using zlib and instruct Claude to decode it dynamically within a custom tool execution.
-C. Set `system=[{"type": "text", "text": system_policy, "cache_control": {"type": "ephemeral"}}]` and clean `messages`.
-D. Retain `system_policy` inside the user turn but set `cache_control: {"type": "ephemeral"}` on volatile message turns.
-
----
-
-**14.** `[task 6.3 · structured output extraction via tool_choice forcing in SDK]` A developer builds an automated triage pipeline that must extract entities from support emails into a typed schema:
-
-```python
-tools = [
-    {
-        "name": "record_triage_decision",
-        "description": "Record triage category and urgency rating.",
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "category": {"type": "string", "enum": ["billing", "technical", "security"]},
-                "urgency": {"type": "integer", "minimum": 1, "maximum": 5}
-            },
-            "required": ["category", "urgency"]
-        }
-    }
-]
-
 response = client.messages.create(
     model="claude-3-5-sonnet-20241022",
-    max_tokens=512,
-    tools=tools,
-    messages=[{"role": "user", "content": email_text}],
-    tool_choice={"type": "auto"}
+    max_tokens=10,
+    stop_sequences=["\n"],
+    messages=[{
+        "role": "user",
+        "content": f"Classify sentiment (positive/negative/neutral) for: {review_text}\nLabel:"
+    }],
 )
 ```
 
-In production, Claude occasionally outputs conversational analysis in prose instead of calling `record_triage_decision`. Which configuration change deterministically guarantees that Claude executes the extraction tool?
+What does adding `stop_sequences=["\n"]` actually accomplish here, and is it a fully reliable fix on its own?
 
-A. Set `tool_choice={"type": "tool", "name": "record_triage_decision"}` to enforce calling that exact tool signature.
-B. Set `tool_choice={"type": "any"}` to require a tool call, and define a secondary regex parser for free-form prose.
-C. Append `"Invoke record_triage_decision exclusively"` to the user message while leaving `tool_choice` set to `"auto"`.
-D. Set `temperature=0.0` on the API call and remove parameter descriptions from `input_schema` to reduce token spread.
+A. It forces every character in the response to lowercase, which is what was suppressing the justification sentence.
+B. Generation halts on the first newline, cutting off text on a following line — but not text on the same line as the label.
+C. It reduces token cost by half regardless of output length, and is unrelated to where generation actually stops.
+D. It removes the need for `max_tokens` entirely on this and every other request, since a stop sequence always makes length limits fully redundant.
 
 ---
 
-**15.** `[task 6.3 · defensive validation of structured tool inputs in Python]` An agent executes bank wire transfers via a tool call. The application defines a Pydantic schema for validation:
+**14.** `[task 6.2 · cached-prefix stability vs. volatile content]` A system prompt is assembled fresh on every request by this function:
 
 ```python
-from pydantic import BaseModel, Field, ValidationError
-
-class WireTransferSchema(BaseModel):
-    recipient_iban: str = Field(min_length=15, max_length=34)
-    amount_cents: int = Field(gt=0)
-    currency: str = Field(pattern="^[A-Z]{3}$")
-
-def process_agent_turn(messages: list[dict]) -> dict:
-    response = client.messages.create(
-        model="claude-3-5-sonnet-20241022",
-        max_tokens=1024,
-        tools=[wire_tool_def],
-        messages=messages
-    )
-    for block in response.content:
-        if block.type == "tool_use":
-            # Validation logic
+def build_system_block(company_docs: str) -> list[dict]:
+    return [{
+        "type": "text",
+        "text": f"Current time: {datetime.utcnow().isoformat()}\n\n{company_docs}",
+        "cache_control": {"type": "ephemeral"},
+    }]
 ```
 
-When `block.type == "tool_use"` arrives, how should the application validate arguments and handle schema violations defensively?
+`company_docs` is a stable 5,000-token policy document that almost never changes, but the cache never registers a hit on any request. Why, and what should change in how this block is built?
 
-A. Execute transfer queries directly and catch database driver constraint exceptions inside backend persistence code.
-B. Validate `block.input` via `WireTransferSchema` and return a `tool_result` with `is_error=True` if `ValidationError` is raised.
-C. Catch `ValidationError` and immediately raise an unhandled exception to terminate the Python application runtime.
-D. Silently coerce invalid argument values to hardcoded fallback defaults before invoking the financial transaction.
+A. Move the volatile timestamp after `company_docs`, since a per-request value breaks prefix matching for the whole segment.
+B. Remove `cache_control` entirely — a system block containing any timestamp can never be made cacheable under any circumstances.
+C. Increase the block's total token count so it clears the caching minimum regardless of what the timestamp does.
+D. Switch to a longer cache TTL so the changing timestamp has more time to be reused across requests.
+
+---
+
+**15.** `[task 6.3 · incremental parsing of a streamed response]` An application streams a response and needs to detect, as early as possible mid-stream, whether Claude is about to refuse the request, so the UI can switch state without waiting for the full response. The current code buffers the whole stream before checking:
+
+```python
+full_text = ""
+with client.messages.stream(...) as stream:
+    for text in stream.text_stream:
+        full_text += text
+
+if "I can't help with that" in full_text:
+    show_refusal_ui()
+else:
+    show_normal_ui(full_text)
+```
+
+What change lets the application react to a refusal as early as possible, consistent with how streaming is meant to be handled?
+
+A. Check each `text` chunk against the refusal phrase inside the loop itself, instead of waiting for `full_text`.
+B. Switch from `stream.text_stream` to `stream.get_final_text()`, documented to surface refusals sooner than incremental chunks.
+C. Set `max_tokens` very low so any response, refusal or not, always completes fast enough that the delay stops mattering to the UI.
+D. Poll the Messages API every 100ms with a fresh non-streaming request instead of holding one streaming connection open.
 
 

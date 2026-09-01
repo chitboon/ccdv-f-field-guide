@@ -54,13 +54,13 @@ it, misread the item, or picked the plausible-but-soft option.
 
 ---
 
-**13. C** — Static documentation belongs in the top-level `system` parameter structured as a content block with `cache_control: {"type": "ephemeral"}`. This establishes a stable prefix that receives a 90% read discount after turn 1, while keeping the `messages` array clean. Retaining static policies inside dynamic user turns violates prompt caching prefix matching and wastes input tokens. *(task 6.2; concept: system_prompt_caching_sdk; item `d6d-13`)*
+**13. B** — `stop_sequences` halts generation the moment the given string appears in the output, so `"\n"` cuts off anything Claude writes after the label on a following line — but it does nothing if Claude puts the justification on the *same* line as the label, so it narrows the failure mode rather than eliminating it structurally. Lowercasing, cost, and replacing `max_tokens` are all unrelated to what a stop sequence actually controls. *(task 6.3; concept: stop_sequences_output_boundary; item `d6d-13`)*
 
 ---
 
-**14. A** — Setting `tool_choice={"type": "tool", "name": "record_triage_decision"}` deterministically compels Claude to generate structured tool arguments for that exact named tool, eliminating free-form conversational prose. `{"type": "any"}` forces *a* tool but does not isolate a specific named tool, and system prompt text reminders remain probabilistic. *(task 6.3; concept: tool_choice_named_forcing_sdk; item `d6d-14`)*
+**14. A** — A cached block is matched as one exact prefix, so a value that changes on every request (the timestamp) sitting inside that block invalidates the whole segment's prefix match every single time, regardless of how stable the rest of the content is. Moving the volatile part out (after the stable content, or into its own block) restores a stable prefix for `company_docs` to actually get cached. Removing `cache_control`, raising the token count, or lengthening the TTL don't address the actual cause — a prefix that never repeats. *(task 6.2; concept: cached_prefix_stability; item `d6d-14`)*
 
 ---
 
-**15. B** — In production tool loops, application code must validate `block.input` using a schema validator (such as Pydantic). When a `ValidationError` occurs, returning `{"type": "tool_result", "tool_use_id": block.id, "content": str(e), "is_error": True}` allows Claude to see the validation violation, reason over the error, and self-correct on the subsequent turn. *(task 6.3; concept: defensive_pydantic_tool_validation; item `d6d-15`)*
+**15. A** — Checking each chunk as it arrives inside the streaming loop is what lets the application react the moment the refusal phrase appears, instead of waiting for the entire response to buffer first — that's the whole point of consuming `text_stream` incrementally rather than only at the end. `get_final_text()` still waits for the full response, a low `max_tokens` doesn't guarantee an early enough cutoff for detection, and polling with fresh requests abandons streaming rather than using it correctly. *(task 6.3; concept: incremental_stream_parsing; item `d6d-15`)*
 
