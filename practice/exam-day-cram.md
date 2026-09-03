@@ -27,9 +27,9 @@ Two thirds of the paper is D2 + D5 + D1. Budget your attention there.
 
 ## 2. Two test-craft warnings specific to how you prepared
 
-**Your practice bank leaked answers through extreme language.** Measured across all 245 items: absolutes ("never", "at all", "regardless", "entirely") appear in **27.7% of distractors vs 7.3% of correct answers — a 3.8× tell**. You have been rewarded for eliminating the loud option. **Real exam distractors are plausible and measured.** Kill that reflex at the door: choose on the mechanism, not the register.
+**Your practice bank leaked answers through extreme language.** Measured across the 245 items in the bank at audit time: absolutes ("never", "at all", "regardless", "entirely") appear in **27.7% of distractors vs 7.3% of correct answers — a 3.8× tell**. You have been rewarded for eliminating the loud option. **Real exam distractors are plausible and measured.** Kill that reflex at the door: choose on the mechanism, not the register.
 
-**Discount your 96.2%.** Mock 1 was authored by the same pipeline as the drills, against the same objective list, and sat untimed. It measured "no gaps in what I chose to test." It is not a predicted score.
+**Discount both mock scores.** Mock 1 (96.2%) and Mock 2 (98.1%) were authored by the same pipeline as the drills, against the same objective list, **before** the coverage audit — and both were sat **untimed, split across sittings, with immediate per-item feedback**. They measured "no gaps in what I chose to test." Neither is a predicted score. The honest first-pass number is **90.5% across the 168 non-mock items**, and the two clusters that cost marks (objectives 1.2 and 5.1) sit in §5 and §6, not in the drilled domains.
 
 ---
 
@@ -103,7 +103,9 @@ One line each. If an item mentions one of these, this is your only prep on it.
 
 4. **Multi-response technique.** Scored 1/6 on Select TWO items before correcting this. For each option ask **"is this statement true of this stem — yes or no?"** and take every yes. Do **not** rank the four and take the best-looking pair. If two options are direct negations of each other, one of them is almost certainly in the answer.
 
-5. **Also missed on first pass, all in §5:** `effort` lives *inside* `output_config` (top-level is silently ignored, not rejected) · `thinking.display` now defaults to `omitted` · fast mode was **removed on Opus 4.7** and never ran on third-party platforms · toggling `speed` **invalidates the prompt cache** · **Priority Tier is not supported on Opus 5.**
+5. **Insecure output handling (OWASP LLM02) is not prompt injection.** Rendering a model's output straight into a page/DOM without escaping is an **output**-side flaw — the fix is escaping/sanitising at the render boundary, plus treating model text as untrusted data. Prompt injection is the **input** side (adversarial text arriving in the prompt or in retrieved data). If a stem describes model text ending up in HTML, a shell, or SQL, the answer is output escaping, not an input filter. *(Mock 2 Q45 — the only miss on the most recent 53 items)*
+
+6. **Also missed on first pass, all in §5:** `effort` lives *inside* `output_config` (top-level is silently ignored, not rejected) · `thinking.display` now defaults to `omitted` · fast mode was **removed on Opus 4.7** and never ran on third-party platforms · toggling `speed` **invalidates the prompt cache** · **Priority Tier is not supported on Opus 5.**
 
 ---
 
