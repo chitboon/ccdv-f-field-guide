@@ -95,7 +95,15 @@ One line each. If an item mentions one of these, this is your only prep on it.
 
 1. **Post-tool-use hook timing.** Secret redaction and PII masking run **after** tool execution (PostToolUse), on the output. Blocking a destructive call happens **before** (PreToolUse), on the arguments. *(Mock 1 Q48)*
 2. **Tool definition keys.** A tool object needs `name`, `description`, `input_schema`. **`tool_choice` is a request-level parameter, never part of the tool object.** Missing `input_schema` → Claude has no argument shape and calls arrive malformed. *(Mock 1 Q50)*
-3. _[add any gap-coverage-drill misses here — especially items 4 and 7, which test the stale facts in §3]_
+3. **Tool Runner is not the Agent SDK.** This one was missed four times across two drills, so read it twice:
+   - **Tool Runner** — `client.beta.messages.tool_runner`, part of the ordinary SDK. Loops over **only the tools you define**. **No built-in tools.** What it buys you over a hand-written loop is **per-turn hooks**: approval gates, logging, error interception, result modification, retries.
+   - **Claude Agent SDK** — a *separate package*, Claude Code as a library. **Ships** Read/Write/Edit/Bash/Glob/Grep/WebSearch/WebFetch.
+   - Both are **harness-only and self-hosted**. The tool surface is the difference.
+   - **Managed Agents** is the only one of the four that supplies **both** harness and deployment. Its per-session container is **Anthropic-hosted** — that container *is* the deployment half.
+
+4. **Multi-response technique.** Scored 1/6 on Select TWO items before correcting this. For each option ask **"is this statement true of this stem — yes or no?"** and take every yes. Do **not** rank the four and take the best-looking pair. If two options are direct negations of each other, one of them is almost certainly in the answer.
+
+5. **Also missed on first pass, all in §5:** `effort` lives *inside* `output_config` (top-level is silently ignored, not rejected) · `thinking.display` now defaults to `omitted` · fast mode was **removed on Opus 4.7** and never ran on third-party platforms · toggling `speed` **invalidates the prompt cache** · **Priority Tier is not supported on Opus 5.**
 
 ---
 
