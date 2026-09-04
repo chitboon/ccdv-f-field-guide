@@ -1,24 +1,31 @@
-# CCDV-F Gap-Coverage Drill — 17 items
+# CCDV-F Gap-Coverage Drill — 11 items
 
 **Purpose:** every item here tests a named technique from §6 of the official
-exam guide that has **zero coverage** in the 245-item practice bank, or a fact
-the bank teaches in a form that current models now reject with a 400.
+exam guide that had **zero coverage** in the practice bank at the time it was
+written.
 
 **Authored:** 2026-09-03, by hand, against the current Claude API surface.
 Not sampled from the drilled pool — no item here restates one you have sat.
 
 **How to sit it:** untimed or ~40 min, one pass, no peeking. Key is sealed in
-`gap-coverage-drill-key.md`. Items 4, 6 and 13 are multi-response and need
-both letters to count.
+`gap-coverage-drill-key.md`. Item 8 is multi-response and needs both letters
+to count.
+
+**Pruned 2026-09-04, after the exam.** Six items were removed because the
+sitting tested none of that surface: adaptive thinking vs `budget_tokens`,
+`output_config.effort`, fast mode, the removal of assistant prefill, MCP
+connector wiring, and Managed Agents vault credentials. The paper asked no
+questions about new or changed API features and named no models. Stable item
+ids (`gap-NN`) are unchanged in the key, so the six are still findable in git
+history. What remains is the conceptual material the blueprint names.
 
 **Register note:** distractors here are deliberately plausible. The existing
 bank leaks answers through extreme language (absolutes appear in 27.7% of its
 distractors vs 7.3% of its correct answers, a 3.8x tell). Nothing in this set
-is eliminable that way — if you catch yourself hunting for the "measured
-sounding" option, that reflex will not help you tomorrow.
+is eliminable that way — the real paper does not offer a loud wrong option,
+so choosing on register rather than mechanism is a habit worth unlearning.
 
-**Coverage map:** 1.2 (x2), 1.3, 2.5, 5.1 (x3), 5.3, 5.4, 6.1, 7.4 (x2),
-8.1 (x2), 8.2 (x2), 8.3.
+**Coverage map:** 1.2 (×2), 1.3, 2.5, 5.4, 6.1, 7.4, 8.1 (×2), 8.2, 8.3.
 
 ---
 
@@ -49,43 +56,7 @@ D. It converts the agent into a workflow, because a framework's declared graph i
 
 ---
 
-**4.** `[task 5.1 · adaptive thinking replaces a fixed budget]` A service pinned to `claude-opus-5` sends `thinking: {"type": "enabled", "budget_tokens": 8000}` after being migrated from an older model, and every request now fails before a single token is generated. Which TWO statements about this request are correct? (Select TWO)
-
-A. `budget_tokens` is not part of this model's request surface, and the call is rejected with a 400.
-B. Raising `max_tokens` above `budget_tokens` resolves it, since the budget must fit inside the response ceiling.
-C. Sending `thinking: {"type": "adaptive"}` is the current form, letting the model decide how much to think per turn.
-D. Adding `temperature: 1.0` next to the thinking block restores the behaviour the older model had.
-
----
-
-**5.** `[task 5.1 · the request-level cost dial]` A coding agent on `claude-opus-5` produces good output but spends more tokens per task than its budget allows. The team wants one request-level dial to try before moving to a cheaper model. Which one, and what does it actually govern?
-
-A. `max_tokens`, lowered to 4096 — the ceiling the model paces itself against for the whole task.
-B. `speed: "fast"`, which cuts spend by completing the same work in fewer output tokens.
-C. A `task_budget` of 20,000 tokens, a platform-enforced hard cap on what the loop may consume.
-D. `output_config.effort`, stepped to `medium` — it trades thinking depth against token spend.
-
----
-
-**6.** `[task 5.1 · fast mode constraints]` A latency-sensitive endpoint on `claude-opus-5` needs a higher output-token rate, and the team has signed off on premium pricing. Which TWO statements about enabling fast mode are correct? (Select TWO)
-
-A. Per-token price is unchanged; the saving comes from shorter wall-clock time per request.
-B. It requires the beta messages endpoint plus `speed: "fast"` sent as a top-level request parameter.
-C. It is not available through the Batch API, on Priority Tier, or on third-party cloud platforms.
-D. Fast and standard requests draw on one shared rate limit, so no separate quota planning is needed.
-
----
-
-**7.** `[task 5.3 · a technique that a model release removed]` A prompt that reliably returned bare JSON on an older model now returns a 400 on `claude-opus-5`. The request's final entry is `{"role": "assistant", "content": "{"}`. What changed, and what replaces the technique?
-
-A. Thinking blocks now precede the answer, so the parser must read `content[1]` rather than `content[0]`.
-B. Assistant prefill is rejected on current models; constrain the shape with `output_config.format`.
-C. `stop_sequences` must now carry the closing brace for the model to terminate the object cleanly.
-D. The schema has to move into the top-level `system` field, the only instruction channel these models read.
-
----
-
-**8.** `[task 5.4 · why a cache never reads]` A 30,000-token system prompt carries one `cache_control` breakpoint, but `usage.cache_read_input_tokens` stays at 0 across repeated calls. The block ends with a rendered line reading `Generated at 2026-09-03T11:42:07Z`. Which change restores hits?
+**4.** `[task 5.4 · why a cache never reads]` A 30,000-token system prompt carries one `cache_control` breakpoint, but `usage.cache_read_input_tokens` stays at 0 across repeated calls. The block ends with a rendered line reading `Generated at 2026-09-03T11:42:07Z`. Which change restores hits?
 
 A. Add three further breakpoints, so that at least one of the four prefixes still matches between calls.
 B. Shorten the block below the model's minimum cacheable prefix, which moves it to a cheaper matching path.
@@ -94,7 +65,7 @@ D. Render the timestamp to the nearest minute, so calls landing in the same minu
 
 ---
 
-**9.** `[task 6.1 · clearing tool output vs summarizing history]` A long-running agent's history is dominated by large file-read tool results. The team wants those specific results gone from what the model sees, while the original task brief and the recent turns stay intact. Which mechanism fits, and how does it differ from the alternative?
+**5.** `[task 6.1 · clearing tool output vs summarizing history]` A long-running agent's history is dominated by large file-read tool results. The team wants those specific results gone from what the model sees, while the original task brief and the recent turns stay intact. Which mechanism fits, and how does it differ from the alternative?
 
 A. Context editing's `clear_tool_uses` removes old tool results outright; compaction summarizes earlier context.
 B. Compaction removes the tool results once its token threshold trips; context editing is what summarizes them into a digest.
@@ -103,7 +74,7 @@ D. Neither applies to tool results; the supported route is rebuilding the messag
 
 ---
 
-**10.** `[task 8.1 · guaranteeing argument validity]` A `create_ticket` tool intermittently receives a `priority` value outside the four strings its schema allows, and the team wants arguments that validate exactly against that schema rather than being repaired afterwards. What gets them there?
+**6.** `[task 8.1 · guaranteeing argument validity]` A `create_ticket` tool intermittently receives a `priority` value outside the four strings its schema allows, and the team wants arguments that validate exactly against that schema rather than being repaired afterwards. What gets them there?
 
 A. Restate the four permitted values in the tool's `description`, so the model reads them before composing a call.
 B. Validate server-side and return `tool_result` with `is_error: true`, letting the model correct itself on the next turn.
@@ -112,7 +83,7 @@ D. Set `strict: true` on the tool definition itself, with `additionalProperties:
 
 ---
 
-**11.** `[task 8.2 · MCP server primitives]` A team publishes internal runbooks through an MCP server. They want Claude to both invoke runbook actions and offer the runbooks as reusable, parameterized starting points a user can pick from. Which statement about MCP primitives fits?
+**7.** `[task 8.2 · MCP server primitives]` A team publishes internal runbooks through an MCP server. They want Claude to both invoke runbook actions and offer the runbooks as reusable, parameterized starting points a user can pick from. Which statement about MCP primitives fits?
 
 A. A server publishes tools only; anything resource-like or template-like has to live in the host application.
 B. A server can publish tools, resources, and prompts — prompts being reusable templates the client surfaces to the user.
@@ -121,16 +92,7 @@ D. Runbooks must each become a tool definition, since a server has no mechanism 
 
 ---
 
-**12.** `[task 8.2 · wiring a remote MCP server to a request]` A request that sets `mcp_servers=[{"type": "url", "url": "...", "name": "runbooks"}]` and nothing else is rejected as a validation error before reaching the model. What is missing?
-
-A. A matching `tools` entry of type `mcp_toolset` naming the same server.
-B. Each remote tool restated locally as an ordinary definition with its own `input_schema`.
-C. `tool_choice: {"type": "any"}`, without which the model is not permitted to reach a remote server.
-D. The remote tool list written into the top-level `system` field so the model knows the tools exist.
-
----
-
-**13.** `[task 8.3 · built-in vs custom vs Skills vs MCP]` A reporting feature needs two things: search the public web for recent filings, and hand back a formatted `.xlsx` workbook. The team wants whichever options carry the least code they have to own. Which TWO fit? (Select TWO)
+**8.** `[task 8.3 · built-in vs custom vs Skills vs MCP]` A reporting feature needs two things: search the public web for recent filings, and hand back a formatted `.xlsx` workbook. The team wants whichever options carry the least code they have to own. Which TWO fit? (Select TWO)
 
 A. Declare the server-side web search tool, which runs on Anthropic's infrastructure with no client loop.
 B. Wrap a third-party search API as a custom tool, since retrieval has to be executed on the caller's side.
@@ -139,7 +101,7 @@ D. Stand up an MCP server exposing a spreadsheet tool, file generation being out
 
 ---
 
-**14.** `[task 8.1 · why a server-tool failure never raises]` A pipeline wraps its web-search request in a try/except that logs nothing, yet users report silently empty results. The engineer confirms the handler never fires. Why?
+**9.** `[task 8.1 · why a server-tool failure never raises]` A pipeline wraps its web-search request in a try/except that logs nothing, yet users report silently empty results. The engineer confirms the handler never fires. Why?
 
 A. The SDK retries server-tool failures to `max_retries` and then hands back an empty list without raising.
 B. Failures of this kind report only through `usage`, leaving the content blocks structurally normal.
@@ -148,16 +110,7 @@ D. The call returns HTTP 200 with an error object inside the result block, so no
 
 ---
 
-**15.** `[task 7.4 · keeping a credential out of the sandbox]` A Managed Agents deployment must call a partner API with a long-lived key. Security review requires that the key not be readable from inside the agent's container, including by the model. Which approach satisfies that?
-
-A. Export the key in the environment's setup script, so it exists only for the lifetime of that session's container.
-B. Configure a vault `environment_variable` credential, stored by Anthropic and substituted at egress.
-C. Place the key in the agent's `system` field, where it is available at the moment the outbound call is composed.
-D. Commit it to the repository the container mounts, with file permissions restricted to the agent's user.
-
----
-
-**16.** `[task 7.4 · key rotation and access reporting]` A platform team must rotate API keys each quarter and produce a report of which service accounts have been calling the API. Which surface and credential does that work require?
+**10.** `[task 7.4 · key rotation and access reporting]` A platform team must rotate API keys each quarter and produce a report of which service accounts have been calling the API. Which surface and credential does that work require?
 
 A. Any workspace API key, provided the `admin` scope is requested on the call itself.
 B. The Models API, which reports per-key call volume alongside model capability metadata.
@@ -166,7 +119,7 @@ D. The web Console alone; key and service-account lifecycle has no programmatic 
 
 ---
 
-**17.** `[task 2.5 · instructions across interfaces]` A standing instruction that works in a `claude.ai` conversation is not honoured by the team's API integration, which sends the same wording inside a `messages` array and nothing else. What explains the difference?
+**11.** `[task 2.5 · instructions across interfaces]` A standing instruction that works in a `claude.ai` conversation is not honoured by the team's API integration, which sends the same wording inside a `messages` array and nothing else. What explains the difference?
 
 A. A product surface adds its own system prompt and account settings; an API request applies only what it carries.
 B. Style instructions reach the model through `output_config` when sent via the API, and are ignored anywhere else in the request.
