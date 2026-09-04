@@ -91,6 +91,47 @@ One line each. If an item mentions one of these, this is your only prep on it.
 
 ---
 
+## 5b. Second-wave gaps — zero items in 405, found by the 2026-09-04 audit
+
+Seven of these had **no** item anywhere in the bank; seven more had three or
+fewer. Two sit inside the paper's largest sub-objectives. One line each.
+
+**The SDK is a typed client over the same REST endpoint (5.2, 6.1%).** It adds typed exceptions per status, automatic retries (default `max_retries` 2 — 408/409/429/5xx + connection), streaming event assembly, and typed objects. It does **not** add server-side conversation state: the Messages API is **stateless** and you resend the full history every turn, SDK or curl.
+
+**Streaming is HTTP SSE, not websockets (5.2).** One-directional, **not resumable** — a dropped connection means resending the whole prompt. There is no reconnect-to-message-id.
+
+**Cache check-pointing (5.4).** In a growing conversation, move a breakpoint to the end of the transcript-so-far each turn so settled history is cached instead of re-billed. Four `cache_control` blocks is the ceiling, so it is a *rolling* checkpoint. Appending to a cached prefix is safe; **editing** inside it is what invalidates.
+
+**What `usage` actually reports (5.4).** `cache_creation_input_tokens` (**1.25×** base input) and `cache_read_input_tokens` (**0.10×**) are separate counters — **not** inside `input_tokens`. Summing only input+output under-reports every cached request. Thinking tokens bill as **output**; there is no `thinking_tokens` field.
+
+**Context isolation via subagents (6.1, 3.8%).** For fan-out reading, give each item its own subagent and context window and return a structured extract to the parent. Compaction *summarizes* one agent's history, clearing *removes* tool results — subagents give you **more windows**. Don't answer a fan-out question with compaction.
+
+**Tool description writing (8.1).** The description **is** the specification — the model has no other source for when a tool applies, what arguments mean, or what comes back. `strict: true` guarantees arguments *validate*, not that the call was *appropriate*. Different layers.
+
+**Plugin management and plugin dependencies (2.5 / 2.6).** Treat a shared toolkit as a dependency: pin its version in the project's checked-in config so every clone resolves the same revision. Per-machine installs drift; a periodic manual reinstall is a request, not a control.
+
+**Prompt versioning (2.6).** Prompts are software — an id stored with each edit, recorded on every request beside the model id, benchmarked against a golden set in CI before shipping. A cache is not an audit trail.
+
+**Input sanitization is delimiting, not escaping (6.2).** Wrap untrusted content in explicit tags, say in `system` that its contents are data and never instructions, and put the operative instruction **after** the block. Escaping markup protects a parser; the model is not parsing.
+
+**Defensive parsing (6.3).** Constrain with `output_config={"format": {...}}` (or `messages.parse()`) **and** still parse behind a typed failure path. Brace-stripping breaks on a brace inside a string.
+
+**Confidence is not accuracy (6.3).** Wrong output reads exactly like right output. A self-reported confidence score comes from the same process that produced the confident error — it filters nothing. Ground figures in retrieved text and cite them.
+
+**Image blocks (2.3).** `{"type": "image", "source": {"type": "base64", "media_type": "image/jpeg", "data": ...}}` in the user content array. `document` is the PDF/text shape — the block type must match the file's MIME type.
+
+**MCP primitives (8.2).** **Tools** = actions the model invokes. **Resources** = readable content pulled into context. **Prompts** = reusable templates the client surfaces to the user. Not interchangeable. Transport: `stdio` local child process, HTTP/SSE remote.
+
+**Supervisor hierarchies (1.1, 4.5%).** Works because each worker returns a *result*, not its transcript — that is what keeps the parent's context bounded. Progress state lives in a store outside the model. Sharing one conversation across workers forfeits the whole benefit.
+
+**Claude Code: `CLAUDE.md` + headless (3.1).** Standing conventions go in `CLAUDE.md` at the repo root (merging hierarchically with subdirectory files). Non-interactive runs use print mode `claude -p`, which streams to stdout and composes with pipelines. `settings.json` carries permissions, env, and hooks — not standing prose.
+
+**Isolating a failure (4.1).** Compare artifacts at the boundary: value present in the recorded `tool_use.input` and absent in what was written puts the fault in the **integration layer**, not the model. Do that before touching the prompt.
+
+**Per-tenant session hygiene (2.5, 8.6%).** Isolation is structural: a separate `messages` array per tenant, that tenant's policy in top-level `system`, each prefix cached independently. An instruction in a shared thread is not a boundary.
+
+---
+
 ## 6. My confirmed misses — read these last
 
 1. **Post-tool-use hook timing.** Secret redaction and PII masking run **after** tool execution (PostToolUse), on the output. Blocking a destructive call happens **before** (PreToolUse), on the arguments. *(Mock 1 Q48)*
@@ -107,6 +148,11 @@ One line each. If an item mentions one of these, this is your only prep on it.
 
 6. **Also missed on first pass, all in §5:** `effort` lives *inside* `output_config` (top-level is silently ignored, not rejected) · `thinking.display` now defaults to `omitted` · fast mode was **removed on Opus 4.7** and never ran on third-party platforms · toggling `speed` **invalidates the prompt cache** · **Priority Tier is not supported on Opus 5.**
 
+7. **Mid-conversation system messages preserve prompt cache.** To inject an operator instruction mid-session without invalidating the cached top-level system prompt or prefix, append `{"role": "system", "content": ...}` directly into the `messages` array. Do **not** modify the top-level `system` parameter (breaks prefix matching) and do **not** inject `"SYSTEM:"` markers into user turns (untrusted user/doc channel). *(Current-API Drill Item 5)*
+
+8. **Batch results are unordered & union-typed.** `client.messages.batches.results()` returns rows in **non-deterministic order** — never `zip(rows, results)`; always match using **`custom_id`**. Furthermore, only `result.type == "succeeded"` carries `.message`; checking `.message` on errored/canceled/expired entries raises `AttributeError`. *(Current-API Drill Item 10)*
+
 ---
 
 **Last thing before you go in:** the mechanism, not the register. Your practice rewarded spotting the loud wrong answer; the real paper won't offer one.
+
