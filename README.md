@@ -34,11 +34,11 @@ An official-grade, community-maintained field guide and practice suite for the *
    - **[API & LLM Diagnostic Quiz](practice/diagnostic-quiz/ccdv-f-diagnostic-quiz.md)** (15 items)
    - **[Phase 1 Concept Drills](practice/concept-drills/ccdv-f-concept-drills.md)** (53 items)
    - **[Phase 2 Scenario Domain Drills](practice/scenario-drills/ccdv-f-scenario-drills.md)** (53 items)
-   - **Domain Drills (rebuilt, scenario-based, sealed key)** — 2×+ exam volume per domain (131 items total):
+   - **Domain Drills (rebuilt, scenario-based, sealed key)** — 2×+ exam volume per domain (139 items total):
      [D1](practice/domain-drills/d1-domain-drill.md) (16) ·
      [D2](practice/domain-drills/d2-domain-drill.md) (52) ·
-     [D3](practice/domain-drills/d3-domain-drill.md) (6) ·
-     [D4](practice/domain-drills/d4-domain-drill.md) (6) ·
+     [D3](practice/domain-drills/d3-domain-drill.md) (10) ·
+     [D4](practice/domain-drills/d4-domain-drill.md) (10) ·
      [D5](practice/domain-drills/d5-domain-drill.md) (18) ·
      [D6](practice/domain-drills/d6-domain-drill.md) (15) ·
      [D7](practice/domain-drills/d7-domain-drill.md) (8) ·
@@ -46,6 +46,7 @@ An official-grade, community-maintained field guide and practice suite for the *
    - **Targeted Gap Drills**:
      [Gap-Coverage Drill](practice/targeted-drills/gap-coverage-drill.md) (11) ·
      [Miss-Remediation Drill](practice/targeted-drills/miss-remediation-drill.md) (12) ·
+     **[Session Lifecycle & Agent Basics](practice/targeted-drills/session-and-agent-basics.md) (14)** ·
      [Coverage-Gap Drill 2](practice/targeted-drills/coverage-gap-drill-2.md) (20)
    - **[Full Mock Exam 1 (blueprint-exact, sealed key)](practice/mocks/mock-1.md)** (53 items)
    - **[Full Mock Exam 2 (blueprint-exact, sealed key)](practice/mocks/mock-2.md)** (53 items)
