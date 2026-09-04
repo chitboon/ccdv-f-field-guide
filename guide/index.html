@@ -4,68 +4,140 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CCDV-F Field Guide — Claude Certified Developer Foundations Study Guide &amp; Practice Exam</title>
-<meta name="description" content="Free unofficial CCDV-F study guide: 423 practice items, two blueprint-exact 53-item mock exams, per-domain mental models, and 12 trap patterns. Covers all 8 domains of the Claude Certified Developer – Foundations exam.">
-<meta name="keywords" content="CCDV-F, Claude Certified Developer Foundations, Anthropic certification, Claude certification exam, CCDV-F practice exam, CCDV-F study guide, CCDV-F mock exam, Claude API mechanics, agents and workflows, tools and MCP, prompt engineering, context engineering, model selection, prompt caching, Claude Code, exam prep">
+<meta name="description" content="Free unofficial CCDV-F study guide with 302 practice items, 2 full mock exams, 12 trap patterns, domain mental models, and a 926/1000 passing strategy for the Claude Certified Developer Foundations exam.">
+<meta name="keywords" content="CCDV-F, Claude Certified Developer Foundations, Anthropic certification, Claude API, Messages API, prompt caching, tool use, MCP, model selection, prompt engineering, context management, Claude Code, CCDV-F practice exam, CCDV-F study guide">
 <meta name="author" content="Chit Boon Lee">
+<meta name="google-site-verification" content="X6Kao9209wla57OvstiQz_syb6r_meX2zg8y77E5WFU">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://chitboon.github.io/ccdv-f-field-guide/guide/">
 
+<!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="CCDV-F Field Guide — Claude Certified Developer Foundations Study Guide &amp; Practice Exam">
-<meta property="og:description" content="Unofficial study guide for the Claude Certified Developer – Foundations (CCDV-F) exam. 423 practice items, two full mock exams, trap patterns, and per-domain mental models.">
+<meta property="og:description" content="Free unofficial study guide for the Claude Certified Developer – Foundations (CCDV-F) exam. 302 practice items, 2 full mocks, 12 trap patterns, and 8 domain guides.">
 <meta property="og:url" content="https://chitboon.github.io/ccdv-f-field-guide/guide/">
 <meta property="og:site_name" content="Claude Certified Developer – Foundations (CCDV-F) Field Guide">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://chitboon.github.io/ccdv-f-field-guide/assets/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="CCDV-F Field Guide — Claude Certified Developer Foundations study guide and practice suite">
+<meta property="og:image:alt" content="CCDV-F Field Guide — Claude Certified Developer Foundations Study Guide">
+
+<!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="CCDV-F Field Guide — Claude Certified Developer Foundations Study Guide">
-<meta name="twitter:description" content="Unofficial study guide for the CCDV-F exam. 423 practice items, two full mock exams, trap patterns, per-domain mental models.">
+<meta name="twitter:title" content="CCDV-F Field Guide — Claude Certified Developer Foundations Study Guide &amp; Practice Exam">
+<meta name="twitter:description" content="Free unofficial study guide for the Claude Certified Developer – Foundations (CCDV-F) exam. 302 practice items, 2 full mocks, 12 trap patterns, and 8 domain guides.">
 <meta name="twitter:image" content="https://chitboon.github.io/ccdv-f-field-guide/assets/og-image.png">
 
+<!-- Structured Data (JSON-LD) -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Course",
   "name": "CCDV-F Field Guide — Claude Certified Developer Foundations Study Guide",
-  "description": "Unofficial study guide for the Claude Certified Developer – Foundations (CCDV-F) exam by Anthropic. 423 practice items, two blueprint-exact 53-item mock exams, 12 trap patterns, and per-domain mental models across all eight exam domains.",
-  "provider": { "@type": "Person", "name": "Chit Boon Lee", "url": "https://github.com/chitboon" },
+  "description": "Unofficial study guide for the Claude Certified Developer – Foundations (CCDV-F) exam by Anthropic. 302 practice items, 2 full mock exams, 12 trap patterns, 8 domain mental models, and real passing strategy (926/1000).",
+  "provider": {
+    "@type": "Person",
+    "name": "Chit Boon Lee",
+    "url": "https://github.com/chitboon"
+  },
   "educationalLevel": "Intermediate",
-  "teaches": ["Claude API mechanics","Agents and workflows","Tools and MCP","Prompt and context engineering","Model selection and optimization","Security and safety","Eval, testing and debugging","Claude Code"],
-  "coursePrerequisites": "Working experience building applications against an LLM API",
+  "teaches": [
+    "Claude Messages API Integration",
+    "Autonomous Agent Loops and Workflows",
+    "Server-Sent Events (SSE) Streaming",
+    "Prompt Caching and Token Economics",
+    "Tool Use and Schema Design",
+    "Model Context Protocol (MCP)",
+    "Session Lifecycle and Multi-Tenant Isolation",
+    "Security and Insecure Output Handling"
+  ],
   "isAccessibleForFree": true,
   "inLanguage": "en",
   "courseMode": "online",
-  "hasCourseInstance": { "@type": "CourseInstance", "courseMode": "online", "courseWorkload": "PT20H" },
-  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD", "category": "Exam Preparation" },
-  "about": { "@type": "Thing", "name": "Claude Certified Developer – Foundations (CCDV-F) Certification" }
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+    "category": "Exam Preparation"
+  },
+  "about": {
+    "@type": "Thing",
+    "name": "Claude Certified Developer – Foundations (CCDV-F) Certification"
+  }
 }
 </script>
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    { "@type": "Question", "name": "What is the CCDV-F exam?",
-      "acceptedAnswer": { "@type": "Answer", "text": "The Claude Certified Developer – Foundations (CCDV-F) is Anthropic's developer-level certification. It has 53 items across 120 minutes, costs $125 USD, is scored 100–1000 with a pass mark of 720, and is valid for 12 months. Anthropic's exam guide states the format is multiple-choice and multiple-response items, with each item stating how many answers to select." } },
-    { "@type": "Question", "name": "What domains are on the CCDV-F exam?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Eight domains: Applications and Integration (33.1%), Model Selection and Optimization (16.8%), Agents and Workflows (14.7%), Prompt and Context Engineering (11.0%), Tools and MCPs (10.6%), Security and Safety (8.1%), Claude Code (3.1%), and Eval, Testing and Debugging (2.6%). Two thirds of the paper sits in the first three." } },
-    { "@type": "Question", "name": "How many practice items does the CCDV-F Field Guide include?",
-      "acceptedAnswer": { "@type": "Answer", "text": "423 practice items: two blueprint-exact 53-item mock exams, 139 domain drills, 57 targeted gap drills, 53 concept drills, 53 scenario drills, and a 15-item diagnostic quiz. Every item is hand-authored and passes automated checks for answer-position balance, option-length bias, phrasing overlap, source provenance, and near-duplication." } },
-    { "@type": "Question", "name": "What does the CCDV-F exam actually emphasise?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Architectural judgement over syntax recall. The recurring principle is to prefer structural, deterministic mechanisms over prompt-level requests: a validating hook rather than an instruction, a separate message array per tenant rather than a label in the prompt, a schema rather than a plea for well-formed output." } }
-  ]
+  "@type": "WebSite",
+  "name": "CCDV-F Field Guide",
+  "url": "https://chitboon.github.io/ccdv-f-field-guide/guide/",
+  "description": "Unofficial study guide for the Claude Certified Developer – Foundations (CCDV-F) exam",
+  "author": {
+    "@type": "Person",
+    "name": "Chit Boon Lee",
+    "jobTitle": "CCDV-F Certified (926/1000)",
+    "url": "https://github.com/chitboon"
+  },
+  "mainEntity": {
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the CCDV-F exam?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The Claude Certified Developer – Foundations (CCDV-F) is Anthropic's developer certification. It tests 53 items over 120 minutes, costs $125 USD, and requires a scaled score of 720/1000 to pass."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What domains are on the CCDV-F exam?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Eight domains: Applications and Integration (33.1%), Model Selection and Optimization (16.8%), Agents and Workflows (14.7%), Prompt and Context Engineering (11.0%), Tools and MCPs (10.6%), Security and Safety (8.1%), Claude Code (3.1%), and Evaluation, Testing, and Debugging (2.6%)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How many practice questions are in the CCDV-F Field Guide?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The field guide includes 302 practice items: 15 diagnostic quiz items, 53 concept drills, 53 scenario drills, 139 domain drills, 43 targeted gap drills, and two full 53-item mock exams."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the single most important architectural principle for CCDV-F?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Structural and deterministic mechanisms beat prompt-level suggestions. Enforce constraints via schemas, API parameter structures, PreToolUse hooks, output-side escaping, and dedicated session data stores rather than asking Claude in natural language."
+        }
+      }
+    ]
+  }
 }
 </script>
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "CCDV-F Field Guide", "item": "https://chitboon.github.io/ccdv-f-field-guide/" },
-    { "@type": "ListItem", "position": 2, "name": "Study Guide", "item": "https://chitboon.github.io/ccdv-f-field-guide/guide/" }
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "CCDV-F Field Guide",
+      "item": "https://chitboon.github.io/ccdv-f-field-guide/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Study Guide",
+      "item": "https://chitboon.github.io/ccdv-f-field-guide/guide/"
+    }
   ]
 }
 </script>
@@ -75,9 +147,10 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
   :root{
-    --ground:#FAF9F6; --surface:#FFFFFF; --surface-2:#F1F0EB;
+    --ground:#FAF9F6; --surface:#FFFFFF; --surface-2:#F1F0EB; --sunk:#EDECE6;
     --ink:#1C2028; --ink-mid:#4A515C; --ink-soft:#6E7681;
-    --accent:#1F6F8B; --accent-soft:#E7F0F4;
+    --accent:#1F6F8B;
+    --good:#2C6B4F; --good-bg:#EAF1EC; --warn:#9C4A1A; --warn-bg:#F8EDE6;
     --rule:#DEDCD4; --rule-soft:#E9E7E0;
     --serif:'Newsreader',Georgia,serif;
     --sans:'IBM Plex Sans',system-ui,-apple-system,sans-serif;
@@ -85,113 +158,316 @@
   }
   @media(prefers-color-scheme:dark){
     :root:not([data-theme="light"]){
-      --ground:#14171C; --surface:#1B1F26; --surface-2:#22272F;
+      --ground:#14171C; --surface:#1B1F26; --surface-2:#22272F; --sunk:#191D23;
       --ink:#E8EAED; --ink-mid:#B0B7C0; --ink-soft:#868D96;
-      --accent:#6FBDD6; --accent-soft:#17262C;
+      --accent:#6FBDD6;
+      --good:#6FB894; --good-bg:#182420; --warn:#DA9463; --warn-bg:#2A1E16;
       --rule:#2B313A; --rule-soft:#232931;
     }
   }
-  :root[data-theme="dark"]{
-    --ground:#14171C; --surface:#1B1F26; --surface-2:#22272F;
-    --ink:#E8EAED; --ink-mid:#B0B7C0; --ink-soft:#868D96;
-    --accent:#6FBDD6; --accent-soft:#17262C;
-    --rule:#2B313A; --rule-soft:#232931;
-  }
   *{box-sizing:border-box}
-  body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:860px;margin:0 auto;padding:0 24px}
-  a{color:var(--accent)}
-  header{border-top:8px solid var(--accent);padding:56px 0 8px}
-  .kicker{font-family:var(--mono);font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 14px}
-  h1{font-family:var(--serif);font-weight:600;font-size:clamp(2.1rem,6vw,3.1rem);line-height:1.1;margin:0 0 12px;letter-spacing:-.01em}
-  .lede{font-size:1.12rem;color:var(--ink-mid);margin:0 0 28px;max-width:64ch}
-  .facts{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--rule);border-radius:10px;overflow:hidden;background:var(--surface);margin:0 0 12px}
-  .fact{flex:1 1 132px;padding:14px 16px;border-right:1px solid var(--rule-soft)}
-  .fact:last-child{border-right:0}
-  .fact b{display:block;font-family:var(--mono);font-size:1.18rem;color:var(--accent);font-weight:500}
-  .fact span{font-size:.8rem;color:var(--ink-soft)}
-  .note{background:var(--accent-soft);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:14px 18px;margin:26px 0;font-size:.95rem;color:var(--ink-mid)}
-  h2{font-family:var(--serif);font-weight:600;font-size:1.62rem;margin:46px 0 6px;letter-spacing:-.01em}
-  h2+p{margin-top:0;color:var(--ink-mid)}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin:20px 0}
-  .card{display:block;background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:16px 18px;text-decoration:none;color:inherit;transition:border-color .15s,transform .15s}
-  .card:hover{border-color:var(--accent);transform:translateY(-1px)}
-  .card .w{font-family:var(--mono);font-size:.82rem;color:var(--accent)}
-  .card .t{font-weight:600;margin:3px 0 4px}
-  .card .d{font-size:.86rem;color:var(--ink-soft);line-height:1.5}
-  ul.plain{list-style:none;padding:0;margin:14px 0}
-  ul.plain li{padding:9px 0;border-bottom:1px solid var(--rule-soft);font-size:.95rem}
-  ul.plain li:last-child{border-bottom:0}
-  ul.plain .n{font-family:var(--mono);color:var(--ink-soft);font-size:.84rem}
-  footer{margin:64px 0 0;border-top:1px solid var(--rule);padding:26px 0 56px;font-size:.86rem;color:var(--ink-soft)}
-  footer a{color:var(--ink-mid)}
-  @media(max-width:560px){.fact{flex:1 1 50%;border-bottom:1px solid var(--rule-soft)}}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);line-height:1.6;font-size:16px}
+  header{background:var(--surface);border-bottom:1px solid var(--rule);padding:2.5rem 1.5rem}
+  .wrap{max-width:1100px;margin:0 auto}
+  .badge{display:inline-block;background:var(--good-bg);color:var(--good);font-weight:600;font-size:0.8rem;padding:0.25rem 0.6rem;border-radius:4px;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.75rem}
+  h1{font-family:var(--serif);font-size:2.4rem;line-height:1.2;margin:0 0 0.5rem 0;color:var(--accent)}
+  .lead{color:var(--ink-mid);font-size:1.15rem;max-width:850px;margin:0 0 1rem 0}
+  .meta-bar{display:flex;flex-wrap:wrap;gap:1.5rem;color:var(--ink-soft);font-size:0.9rem;border-top:1px solid var(--rule-soft);padding-top:1rem}
+  .meta-bar span strong{color:var(--ink)}
+
+  main{padding:2.5rem 1.5rem}
+  .grid-layout{display:grid;grid-template-columns:260px 1fr;gap:2.5rem}
+  @media(max-width:850px){.grid-layout{grid-template-columns:1fr}}
+
+  nav.toc{position:sticky;top:1.5rem;height:fit-content;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:1.2rem}
+  nav.toc h3{font-size:0.95rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--ink-soft);margin-top:0}
+  nav.toc ul{list-style:none;padding:0;margin:0;font-size:0.9rem}
+  nav.toc li{margin-bottom:0.6rem}
+  nav.toc a{color:var(--ink-mid);text-decoration:none}
+  nav.toc a:hover{color:var(--accent)}
+
+  section{margin-bottom:3rem}
+  h2{font-family:var(--serif);font-size:1.75rem;color:var(--ink);border-bottom:2px solid var(--rule-soft);padding-bottom:0.4rem;margin-top:0}
+  h3{font-size:1.2rem;color:var(--accent);margin-top:1.5rem;margin-bottom:0.5rem}
+
+  table{width:100%;border-collapse:collapse;margin:1rem 0 1.5rem 0;font-size:0.92rem}
+  th,td{padding:0.75rem 0.9rem;text-align:left;border-bottom:1px solid var(--rule)}
+  th{background:var(--surface-2);color:var(--ink);font-weight:600}
+  tr:hover{background:var(--surface-2)}
+
+  .card{background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:1.25rem;margin-bottom:1rem}
+  .card h4{margin:0 0 0.4rem 0;font-size:1.05rem;color:var(--ink)}
+  .card p{margin:0 0 0.5rem 0;font-size:0.92rem;color:var(--ink-mid)}
+
+  code{font-family:var(--mono);font-size:0.88em;background:var(--surface-2);padding:0.15em 0.35em;border-radius:3px}
+  pre code{display:block;padding:1rem;background:var(--surface-2);overflow-x:auto;border-radius:4px;border:1px solid var(--rule-soft)}
+
+  .alert{padding:1rem 1.25rem;border-radius:6px;margin:1.25rem 0;font-size:0.95rem}
+  .alert.good{background:var(--good-bg);border-left:4px solid var(--good);color:var(--good)}
+  .alert.warn{background:var(--warn-bg);border-left:4px solid var(--warn);color:var(--warn)}
+
+  footer{border-top:1px solid var(--rule);padding:2rem 1.5rem;background:var(--surface);font-size:0.88rem;color:var(--ink-soft);text-align:center}
+  footer a{color:var(--accent);text-decoration:none}
 </style>
 </head>
 <body>
+
 <header>
   <div class="wrap">
-    <p class="kicker">Unofficial · community-maintained · free</p>
-    <h1>Claude Certified Developer&nbsp;— Foundations</h1>
-    <p class="lede">A field guide and practice suite for the CCDV-F exam: per-domain mental models, 423 hand-authored practice items, and two blueprint-exact mock papers.</p>
-    <div class="facts">
-      <div class="fact"><b>53</b><span>items</span></div>
-      <div class="fact"><b>120</b><span>minutes</span></div>
-      <div class="fact"><b>720</b><span>to pass / 1000</span></div>
-      <div class="fact"><b>$125</b><span>exam fee</span></div>
-      <div class="fact"><b>12</b><span>months valid</span></div>
+    <div class="badge">Verified Exam Pass Strategy · 926 / 1000</div>
+    <h1>CCDV-F Field Guide</h1>
+    <p class="lead">An unofficial, comprehensive study guide and production reference for the <strong>Claude Certified Developer – Foundations</strong> (CCDV-F) certification by Anthropic.</p>
+    <div class="meta-bar">
+      <span><strong>53 items</strong> · 120 minutes</span>
+      <span>Pass: <strong>720/1000</strong></span>
+      <span>Practice Bank: <strong>302 items</strong></span>
+      <span>Author: <strong>Chit Boon Lee</strong></span>
+      <span>License: <strong>CC BY 4.0</strong></span>
     </div>
   </div>
 </header>
 
 <main class="wrap">
-  <div class="note">
-    <strong>Not affiliated with Anthropic.</strong> Every item here is written from the published exam objectives — no exam content is reproduced. Where this guide's observations conflict with Anthropic's official exam guide, <strong>the official guide is correct</strong>. Notes drawn from a single sitting are labelled as such, with confidence levels, in the <a href="00-overview.html">overview</a>.
+  <div class="grid-layout">
+    <aside>
+      <nav class="toc">
+        <h3>Contents</h3>
+        <ul>
+          <li><a href="#blueprint">1. Exam Blueprint</a></li>
+          <li><a href="#format">2. Real Exam Register</a></li>
+          <li><a href="#domains">3. The 8 Blueprint Domains</a></li>
+          <li><a href="#traps">4. 12 Trap Patterns</a></li>
+          <li><a href="#practice">5. Practice Suite Roadmap</a></li>
+          <li><a href="#faq">6. FAQ &amp; Strategy</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <div class="content">
+      <!-- Section 1 -->
+      <section id="blueprint">
+        <h2>1. Exam Blueprint Allocation</h2>
+        <p>The CCDV-F examination tests eight domains. Two-thirds of the total exam score is concentrated in Domains 2, 5, and 1:</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Domain</th>
+              <th>Weight</th>
+              <th>Items</th>
+              <th>Core Focus</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="02-applications-and-integration.html"><strong>2. Applications &amp; Integration</strong></a></td>
+              <td><strong>33.1%</strong></td>
+              <td><strong>18</strong></td>
+              <td>Stateless REST, SSE streaming, SDK exception hierarchy, PDF/images, session lifecycle</td>
+            </tr>
+            <tr>
+              <td><a href="05-model-selection-and-optimization.html"><strong>5. Model Selection &amp; Optimization</strong></a></td>
+              <td><strong>16.8%</strong></td>
+              <td><strong>9</strong></td>
+              <td>Quality-first strategy, latency/cost filters, prompt caching invariants, Batch API</td>
+            </tr>
+            <tr>
+              <td><a href="01-agents-and-workflows.html"><strong>1. Agents &amp; Workflows</strong></a></td>
+              <td><strong>14.7%</strong></td>
+              <td><strong>8</strong></td>
+              <td>Autonomous loops, <code>stop_reason</code> control, supervisor return contracts, error recovery</td>
+            </tr>
+            <tr>
+              <td><a href="06-prompt-and-context-engineering.html"><strong>6. Prompt &amp; Context Engineering</strong></a></td>
+              <td><strong>11.0%</strong></td>
+              <td><strong>6</strong></td>
+              <td>XML tag delimiting, few-shot patterns, affirmative phrasing, structured JSON outputs</td>
+            </tr>
+            <tr>
+              <td><a href="08-tools-and-mcps.html"><strong>8. Tools &amp; MCPs</strong></a></td>
+              <td><strong>10.6%</strong></td>
+              <td><strong>5</strong></td>
+              <td>Tool declarations, description as specification, parallel bundling, MCP architecture</td>
+            </tr>
+            <tr>
+              <td><a href="07-security-and-safety.html"><strong>7. Security &amp; Safety</strong></a></td>
+              <td><strong>8.1%</strong></td>
+              <td><strong>4</strong></td>
+              <td>Indirect prompt injection, OWASP LLM02 output escaping, Pre/Post hooks, least privilege</td>
+            </tr>
+            <tr>
+              <td><a href="03-claude-code.html"><strong>3. Claude Code</strong></a></td>
+              <td><strong>3.1%</strong></td>
+              <td><strong>2</strong></td>
+              <td><code>CLAUDE.md</code> hierarchy, settings precedence, headless <code>-p</code> mode, custom commands</td>
+            </tr>
+            <tr>
+              <td><a href="04-eval-testing-and-debugging.html"><strong>4. Eval, Testing &amp; Debugging</strong></a></td>
+              <td><strong>2.6%</strong></td>
+              <td><strong>1</strong></td>
+              <td>Deterministic code checks vs LLM judges, failure boundary tracing, golden datasets</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Section 2 -->
+      <section id="format">
+        <h2>2. Observed Exam Characteristics vs. Official Specification</h2>
+        <p>Anthropic's official exam specification states the exam format is <em>"Multiple-choice and multiple-response items; each item states how many"</em>. Below is an attributed comparison between the formal specification and the observed reality from our live sitting (scored 926/1000). See the <a href="00-overview.html"><strong>Full Orientation &amp; Overview Guide &rarr;</strong></a> for our complete blueprint breakdown:</p>
+        
+        <table>
+          <thead>
+            <tr>
+              <th>Observed Characteristic</th>
+              <th>Confidence</th>
+              <th>Preparation Takeaway</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>All items were single-response (no multi-select)</td>
+              <td><strong>Low</strong> — contradicts official spec</td>
+              <td>Prepare for both. Always read the response-count line on every item.</td>
+            </tr>
+            <tr>
+              <td>Stems ran 3–4 sentences (~35–60 words)</td>
+              <td>Medium</td>
+              <td>Expect concise architectural scenarios rather than lengthy case studies.</td>
+            </tr>
+            <tr>
+              <td>No code snippets in question stems</td>
+              <td>Medium</td>
+              <td>Test architecture, failure boundaries, and error codes rather than syntax debugging.</td>
+            </tr>
+            <tr>
+              <td>No proprietary model names</td>
+              <td>Medium</td>
+              <td>Model questions evaluate abstract quality, latency, and cost per task trade-offs.</td>
+            </tr>
+            <tr>
+              <td>Session lifecycle was tested</td>
+              <td>Medium</td>
+              <td>Master multi-session management, persistence boundaries, eviction, and structural isolation.</td>
+            </tr>
+            <tr>
+              <td>Pacing finished with ~60 min remaining</td>
+              <td>Low — single sitting</td>
+              <td>Rehearse against standard pacing (~60–90 sec/item) so you lose nothing if generous.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="alert good">
+          <strong>The Core Mental Model:</strong> Deterministic beats probabilistic. Enforce system constraints via structural code, schemas, API parameters, and PreToolUse hooks rather than asking Claude politely in prompt prose.
+        </div>
+      </section>
+
+      <!-- Section 3 -->
+      <section id="domains">
+        <h2>3. The 8 Blueprint Domains (Technical Invariants)</h2>
+
+        <div class="card">
+          <h4><a href="01-agents-and-workflows.html">Domain 1: Agents and Workflows (14.7%) &rarr;</a></h4>
+          <p>Autonomous loops branch strictly on <code>stop_reason</code>, never on text presence. In parallel tool execution, the model halts on <code>stop_reason: "tool_use"</code>; the client executes all tools and responds with a <strong>single user turn</strong> bundling all <code>tool_result</code> blocks. In supervisor-worker hierarchies, workers return concise summaries, not full raw transcripts.</p>
+        </div>
+
+        <div class="card">
+          <h4><a href="02-applications-and-integration.html">Domain 2: Applications and Integration (33.1%) &rarr;</a></h4>
+          <p>The Messages API is completely stateless. The client SDK provides typed error mapping, retries (default <code>max_retries=2</code>), and SSE event parsing, but SDK version pinning cannot force Anthropic servers to accept retired parameters. SSE connections are <strong>not resumable</strong>. Handle 429 using the integer <code>retry-after</code> header. Manage session state externally; enforce multi-tenant isolation structurally in data architecture.</p>
+        </div>
+
+        <div class="card">
+          <h4><a href="05-model-selection-and-optimization.html">Domain 5: Model Selection and Optimization (16.8%) &rarr;</a></h4>
+          <p><strong>Quality first:</strong> Validate task viability on the highest capability model first, then optimize down on cost and latency while measuring against the baseline. Prompt caching requires minimum prefixes (~512–4,096 tokens), supports max 4 breakpoints, has a 5-minute hit-refreshing TTL, and charges 1.25× write with a 90% read discount. Notice: <code>cache_creation_input_tokens</code> and <code>cache_read_input_tokens</code> report outside <code>input_tokens</code>.</p>
+        </div>
+
+        <div class="card">
+          <h4><a href="06-prompt-and-context-engineering.html">Domain 6: Prompt and Context Engineering (11.0%) &rarr;</a></h4>
+          <p>Wrap background reference material in XML tags (<code>&lt;policy_docs&gt;</code>) and place instructions at the very bottom to leverage recency attention weighting. Use affirmative phrasing. Assistant prefilling is retired (returns HTTP 400); enforce JSON using tool schemas or structured outputs. Sanitize inputs via structural delimiting rather than character escaping.</p>
+        </div>
+
+        <div class="card">
+          <h4><a href="08-tools-and-mcps.html">Domain 8: Tools and MCPs (10.6%) &rarr;</a></h4>
+          <p>Tools require <code>name</code>, <code>description</code>, and <code>input_schema</code>. The natural language <code>description</code> is the semantic specification that tells Claude <em>when</em> and <em>why</em> to invoke a tool; <code>strict: true</code> validates syntax only. Request-level <code>tool_choice</code> can force a tool. MCP primitives include Tools (actions), Resources (readable data), and Prompts (templates), transmitted over <code>stdio</code> (local) or HTTP/SSE (remote).</p>
+        </div>
+
+        <div class="card">
+          <h4><a href="07-security-and-safety.html">Domain 7: Security and Safety (8.1%) &rarr;</a></h4>
+          <p>Indirect prompt injection arrives in untrusted third-party data. <strong>Insecure Output Handling (OWASP LLM02)</strong> occurs when model output is rendered unescaped into HTML or shells; solve it via <strong>output-side context-aware escaping</strong>, not input prompt filters. <code>PreToolUse</code> hooks block destructive commands before execution; <code>PostToolUse</code> hooks redact PII/secrets after execution.</p>
+        </div>
+
+        <div class="card">
+          <h4><a href="03-claude-code.html">Domain 3: Claude Code (3.1%) &rarr;</a></h4>
+          <p><code>CLAUDE.md</code> provides standing repo memory, merging hierarchically from root to subdirectories. Settings precedence: Enterprise &gt; Project (<code>.claude/settings.json</code>) &gt; User (<code>~/.claude/settings.json</code>). Non-interactive pipelines use headless print mode (<code>claude -p</code>). MCP configs in <code>.claude/mcp.json</code> expand environment variables via <code>${VAR}</code>.</p>
+        </div>
+
+        <div class="card">
+          <h4><a href="04-eval-testing-and-debugging.html">Domain 4: Eval, Testing, and Debugging (2.6%) &rarr;</a></h4>
+          <p>Use deterministic code assertions (JSON schema, Pydantic, regex) for structured fields; use LLM-as-a-Judge with concise-rewarding rubrics for open-ended text. Perform boundary tracing across system layers before changing prompts. Detect silent truncation by asserting <code>stop_reason != "max_tokens"</code>.</p>
+        </div>
+      </section>
+
+      <!-- Section 4 -->
+      <section id="traps">
+        <h2>4. The 12 Trap Patterns</h2>
+        <p>Our field research identified 12 high-frequency cognitive traps tested across the blueprint. <a href="trap-patterns.html"><strong>Read the full 12 Trap Patterns Deep-Dive &rarr;</strong></a></p>
+        <ol>
+          <li><strong>Text Presence vs. <code>stop_reason</code>:</strong> Prose is never a stop signal; loops must continue on <code>tool_use</code> and exit only on <code>end_turn</code>.</li>
+          <li><strong>OWASP LLM02 vs. Prompt Injection:</strong> Unescaped output rendered in the DOM is an output-side flaw requiring entity escaping at render time.</li>
+          <li><strong>Pre vs. Post Hook Timing:</strong> PreToolUse blocks arguments before execution; PostToolUse redacts PII/secrets from output after execution.</li>
+          <li><strong>Tool Runner vs. Agent SDK vs. Managed Agents:</strong> Tool Runner has no built-in tools; Agent SDK ships dev tools self-hosted; Managed Agents supplies hosted containers.</li>
+          <li><strong>SDK Version Pinning vs. Server Deprecation:</strong> Client pinning cannot force server acceptance of retired parameters.</li>
+          <li><strong>Tool <code>description</code> vs. <code>strict: true</code>:</strong> <code>strict: true</code> checks schema validity; natural language description governs semantic applicability.</li>
+          <li><strong>Structural Multi-Tenant Isolation vs. Prompt Prefixes:</strong> Enforce tenant boundaries via separate message arrays and cache keys, never in-prompt text tags.</li>
+          <li><strong>Quality-First Model Selection:</strong> Validate feasibility on flagship capability first; treat latency/cost limits as candidate filters.</li>
+          <li><strong>Parallel Tool Bundling:</strong> Return a single <code>role: "user"</code> turn with all <code>tool_result</code> blocks, never consecutive user messages.</li>
+          <li><strong>Usage Counter Accounting:</strong> <code>cache_creation_input_tokens</code> and <code>cache_read_input_tokens</code> report outside <code>input_tokens</code>.</li>
+          <li><strong>Silent Truncation:</strong> <code>stop_reason == "max_tokens"</code> indicates an abrupt cutoff requiring larger ceilings or continuation.</li>
+          <li><strong>Batch API Ordering:</strong> Results return unordered; match requests to results using <code>custom_id</code>.</li>
+        </ol>
+      </section>
+
+      <!-- Section 5 -->
+      <section id="practice">
+        <h2>5. Practice Suite Roadmap (302 Items)</h2>
+        <p>The practice bank is tiered by cognitive complexity and audited for zero provenance overlap:</p>
+        <ul>
+          <li><strong><a href="../practice/diagnostic-quiz/ccdv-f-diagnostic-quiz.html">Diagnostic Quiz</a>:</strong> 15 items testing foundational API syntax and error taxonomy.</li>
+          <li><strong><a href="../practice/concept-drills/ccdv-f-concept-drills.html">Phase 1 Concept Drills</a>:</strong> 53 rapid-recall items (under 10 minutes per domain).</li>
+          <li><strong><a href="../practice/scenario-drills/ccdv-f-scenario-drills.html">Phase 2 Scenario Domain Drills</a>:</strong> 53 multi-paragraph scenario questions.</li>
+          <li><strong><a href="../practice/domain-drills/d1-domain-drill.html">Domain Drills (D1–D8)</a>:</strong> 139 blueprint-weighted items with sealed keys.</li>
+          <li><strong><a href="../practice/targeted-drills/session-and-agent-basics.html">Targeted Gap Drills</a>:</strong> 43 items focused on session lifecycle, agent construction, and technical fundamentals.</li>
+          <li><strong>Full Mock Exams:</strong> <a href="../practice/mocks/mock-1.html">Mock Exam 1</a> &amp; <a href="../practice/mocks/mock-2.html">Mock Exam 2</a> (two 53-item simulated exam papers with balanced distractors and sealed diagnostic keys).</li>
+        </ul>
+      </section>
+
+      <!-- Section 6 -->
+      <section id="faq">
+        <h2>6. FAQ &amp; Test Day Strategy</h2>
+        <div class="card">
+          <h4>How should I pace myself during the 120-minute exam?</h4>
+          <p>With 53 questions, you have roughly 135 seconds per item. If your form features concise 3–4 sentence stems, you can comfortably finish Pass 1 in 50–60 minutes. Flag difficult questions and return to them during your remaining hour.</p>
+        </div>
+        <div class="card">
+          <h4>Are deprecated features like assistant prefilling tested?</h4>
+          <p>On current Claude models, assistant prefilling and temperature with thinking return HTTP 400. In our sitting, neither new adaptive parameters nor deprecated legacy features were asked. Prepare against the official blueprint standards.</p>
+        </div>
+        <div class="card">
+          <h4>What is the difference between CCDV-F and CCAR-F?</h4>
+          <p>CCDV-F (Developer Foundations) focuses heavily on application integration, API mechanics, streaming SSE, tool execution loops, and session state. CCAR-F (Architect Foundations) tests enterprise orchestration, governance, and high-level workflow trade-offs with longer vignettes.</p>
+        </div>
+      </section>
+    </div>
   </div>
-
-  <h2>Start here</h2>
-  <p>Two pages carry most of the value.</p>
-  <div class="grid">
-    <a class="card" href="00-overview.html">
-      <div class="w">Orientation</div><div class="t">Overview &amp; exam format</div>
-      <div class="d">Blueprint weights, what one sitting looked like and what that is worth, and the structural-over-prompt-level habit the paper rewards.</div>
-    </a>
-    <a class="card" href="trap-patterns.html">
-      <div class="w">12 patterns</div><div class="t">Trap patterns</div>
-      <div class="d">The recurring wrong answers — plausible, measured, and wrong for a reason you can name once you have seen the shape.</div>
-    </a>
-  </div>
-
-  <h2>The eight domains</h2>
-  <p>Ordered by weight. Two thirds of the paper is the first three.</p>
-  <div class="grid">
-    <a class="card" href="02-applications-and-integration.html"><div class="w">33.1% · 18 items</div><div class="t">Applications &amp; Integration</div><div class="d">Stateless REST mechanics, streaming, exception hierarchy, documents and images, session lifecycle, multi-tenant isolation.</div></a>
-    <a class="card" href="05-model-selection-and-optimization.html"><div class="w">16.8% · 9 items</div><div class="t">Model Selection &amp; Optimization</div><div class="d">Quality-first selection, latency and cost as filters, prompt caching invariants, token accounting, batch processing.</div></a>
-    <a class="card" href="01-agents-and-workflows.html"><div class="w">14.7% · 8 items</div><div class="t">Agents &amp; Workflows</div><div class="d">Workflow versus agent, the tool-use loop, supervisor hierarchies, subagent context isolation, deterministic hooks.</div></a>
-    <a class="card" href="06-prompt-and-context-engineering.html"><div class="w">11.0% · 6 items</div><div class="t">Prompt &amp; Context Engineering</div><div class="d">Delimiting untrusted input, few-shot patterns, instruction placement, structured output, defensive parsing.</div></a>
-    <a class="card" href="08-tools-and-mcps.html"><div class="w">10.6% · 5 items</div><div class="t">Tools &amp; MCPs</div><div class="d">Tool schemas, the description as specification, parallel tool results, MCP tools/resources/prompts, transports.</div></a>
-    <a class="card" href="07-security-and-safety.html"><div class="w">8.1% · 4 items</div><div class="t">Security &amp; Safety</div><div class="d">Direct versus indirect injection, insecure output handling, pre- and post-execution hooks, least privilege, secrets.</div></a>
-    <a class="card" href="03-claude-code.html"><div class="w">3.1% · 2 items</div><div class="t">Claude Code</div><div class="d">CLAUDE.md hierarchy, settings precedence, headless mode, slash commands, hooks, MCP configuration.</div></a>
-    <a class="card" href="04-eval-testing-and-debugging.html"><div class="w">2.6% · 1 item</div><div class="t">Eval, Testing &amp; Debugging</div><div class="d">Deterministic assertions versus model-as-judge, golden sets, boundary tracing, silent truncation.</div></a>
-  </div>
-
-  <h2>Practice suite — 423 items</h2>
-  <p>Every item is hand-authored and passes automated checks for answer-position balance, option-length bias, phrasing overlap, source provenance, and near-duplication against the rest of the bank.</p>
-  <ul class="plain">
-    <li><span class="n">106</span> · <a href="../practice/mocks/mock-1.html">Mock exam 1</a> and <a href="../practice/mocks/mock-2.html">mock exam 2</a> — blueprint-exact, 53 items each, sealed keys, zero stem overlap between them</li>
-    <li><span class="n">139</span> · <a href="../practice/domain-drills/d2-domain-drill.html">Domain drills</a> — roughly twice exam volume per domain</li>
-    <li><span class="n">57</span> · Targeted gap drills — <a href="../practice/targeted-drills/session-and-agent-basics.html">session lifecycle &amp; agent basics</a>, <a href="../practice/targeted-drills/coverage-gap-drill-2.html">coverage gaps</a>, and objective-level top-ups</li>
-    <li><span class="n">106</span> · <a href="../practice/concept-drills/ccdv-f-concept-drills.html">Concept drills</a> and <a href="../practice/scenario-drills/ccdv-f-scenario-drills.html">scenario drills</a></li>
-    <li><span class="n">15</span> · <a href="../practice/diagnostic-quiz/ccdv-f-diagnostic-quiz.html">Diagnostic quiz</a> — sit this first to find your weak domains</li>
-  </ul>
-
-  <h2>How the items are built</h2>
-  <p>Most published question banks give themselves away: the correct answer is the longest option, or the wrong ones are padded filler you can eliminate without knowing anything. Three checks in <code>tools/</code> run against every set — answer-position balance by chi-square, option-length rank spread, shared phrasing between options, verbatim overlap against source material, and near-duplicate detection across the whole bank. A fourth measure keeps absolute language ("never", "always", "entirely") at the same rate in correct answers as in distractors, so register cannot be used as a shortcut.</p>
 </main>
 
-<footer class="wrap">
-  <p><strong>Unofficial.</strong> Not affiliated with, endorsed by, or sponsored by Anthropic. "Claude" is a trademark of Anthropic, PBC. Practice items are written from the published exam objectives; no exam content is reproduced.</p>
-  <p><a href="https://github.com/chitboon/ccdv-f-field-guide">Source on GitHub</a> · <a href="../SOURCES.html">Sources</a> · <a href="../CONTRIBUTING.html">Contributing</a> · MIT licensed · Maintained by <a href="https://github.com/chitboon">Chit Boon Lee</a></p>
+<footer>
+  <div class="wrap">
+    <p>CCDV-F Field Guide &copy; 2026 by Chit Boon Lee. Released under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>.</p>
+    <p>Unofficial community study guide. Not affiliated with, endorsed by, or sponsored by Anthropic.</p>
+    <p><a href="https://github.com/chitboon/ccdv-f-field-guide" target="_blank" rel="noopener">GitHub Repository</a> · <a href="../SOURCES">Sources &amp; Attributions</a> · <a href="../sitemap.xml">Sitemap</a></p>
+  </div>
 </footer>
+
 </body>
 </html>

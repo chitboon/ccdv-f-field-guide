@@ -1,10 +1,9 @@
 title: CCDV-F Field Guide
 description: >-
   Unofficial study guide for the Claude Certified Developer – Foundations
-  (CCDV-F) exam by Anthropic. 423 practice items, two blueprint-exact
-  53-item mock exams, domain drills, trap patterns, and per-domain mental
-  models. Covers the API, agents, tools and MCP, prompt and context
-  engineering, model selection, security, evals, and Claude Code.
+  (CCDV-F) exam by Anthropic. 302 practice items, full mock exams,
+  12 trap patterns, 8 domain guides, session lifecycle, tool design,
+  prompt engineering, and API integration.
 url: https://chitboon.github.io
 baseurl: /ccdv-f-field-guide
 
@@ -28,3 +27,4 @@ defaults:
 exclude:
   - tools/
   - CONTRIBUTING.md
+
