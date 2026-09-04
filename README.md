@@ -11,6 +11,7 @@ An official-grade, community-maintained field guide and practice suite for the *
 
 | Domain | Weight | Items | Domain Guide |
 |---|---|---|---|
+| **Overview & Exam Format** | — | — | [00-overview.md](guide/00-overview.md) · [trap-patterns.md](guide/trap-patterns.md) |
 | **Agents and Workflows** | 14.7% | 8 | [01-agents-and-workflows.md](guide/01-agents-and-workflows.md) |
 | **Applications and Integration** | **33.1%** | **18** | [02-applications-and-integration.md](guide/02-applications-and-integration.md) |
 | **Claude Code** | 3.1% | 2 | [03-claude-code.md](guide/03-claude-code.md) |
@@ -25,7 +26,10 @@ An official-grade, community-maintained field guide and practice suite for the *
 
 ## What's Included in This Repository
 
-1. **[Domain Mental Model Guides](guide/)**: Detailed technical notes and code patterns for all 8 blueprint domains.
+1. **[Domain Mental Model Guides](guide/)**:
+   - **[00-Overview & Exam Experience](guide/00-overview.md)**: Real exam format (single-select, scenario stems, abstract tiers, session lifecycle).
+   - **[Domain Guides (01–08)](guide/)**: Comprehensive architectural invariants, SDK error mechanics, and production patterns.
+   - **[Trap Patterns (trap-patterns.md)](guide/trap-patterns.md)**: The 12 core cognitive traps and discriminators tested across the blueprint.
 2. **Practice Suite**:
    - **[API & LLM Diagnostic Quiz](practice/diagnostic-quiz/ccdv-f-diagnostic-quiz.md)** (15 items)
    - **[Phase 1 Concept Drills](practice/concept-drills/ccdv-f-concept-drills.md)** (53 items)
@@ -39,8 +43,12 @@ An official-grade, community-maintained field guide and practice suite for the *
      [D6](practice/domain-drills/d6-domain-drill.md) (15) ·
      [D7](practice/domain-drills/d7-domain-drill.md) (8) ·
      [D8](practice/domain-drills/d8-domain-drill.md) (10)
-   - **[Full Mock Exam 1 (blueprint-exact, sealed key)](practice/mocks/mock-1.md)** (53 items, 8 multi-response)
-   - **[Full Mock Exam 2 (blueprint-exact, sealed key)](practice/mocks/mock-2.md)** (53 items, 8 multi-response)
+   - **Targeted Gap Drills**:
+     [Gap-Coverage Drill](practice/targeted-drills/gap-coverage-drill.md) (11) ·
+     [Miss-Remediation Drill](practice/targeted-drills/miss-remediation-drill.md) (12) ·
+     [Coverage-Gap Drill 2](practice/targeted-drills/coverage-gap-drill-2.md) (20)
+   - **[Full Mock Exam 1 (blueprint-exact, sealed key)](practice/mocks/mock-1.md)** (53 items)
+   - **[Full Mock Exam 2 (blueprint-exact, sealed key)](practice/mocks/mock-2.md)** (53 items)
 3. **Automated Quality & Provenance Gate Tools**:
    - `python3 tools/check-item-quality.py` — Evaluates position balance (chi-square), longest run (≤ 3), answer length ratio, and rank spread.
    - `python3 tools/check-provenance.py` — Provenance scanner ensuring 100% original rephrasings.
