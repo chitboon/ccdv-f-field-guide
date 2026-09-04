@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CCDV-F Field Guide — Claude Certified Developer Foundations Study Guide &amp; Practice Exam</title>
+<meta name="description" content="Free unofficial CCDV-F study guide: 423 practice items, two blueprint-exact 53-item mock exams, per-domain mental models, and 12 trap patterns. Covers all 8 domains of the Claude Certified Developer – Foundations exam.">
+<meta name="keywords" content="CCDV-F, Claude Certified Developer Foundations, Anthropic certification, Claude certification exam, CCDV-F practice exam, CCDV-F study guide, CCDV-F mock exam, Claude API mechanics, agents and workflows, tools and MCP, prompt engineering, context engineering, model selection, prompt caching, Claude Code, exam prep">
+<meta name="author" content="Chit Boon Lee">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://chitboon.github.io/ccdv-f-field-guide/guide/">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="CCDV-F Field Guide — Claude Certified Developer Foundations Study Guide &amp; Practice Exam">
+<meta property="og:description" content="Unofficial study guide for the Claude Certified Developer – Foundations (CCDV-F) exam. 423 practice items, two full mock exams, trap patterns, and per-domain mental models.">
+<meta property="og:url" content="https://chitboon.github.io/ccdv-f-field-guide/guide/">
+<meta property="og:site_name" content="Claude Certified Developer – Foundations (CCDV-F) Field Guide">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://chitboon.github.io/ccdv-f-field-guide/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="CCDV-F Field Guide — Claude Certified Developer Foundations study guide and practice suite">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CCDV-F Field Guide — Claude Certified Developer Foundations Study Guide">
+<meta name="twitter:description" content="Unofficial study guide for the CCDV-F exam. 423 practice items, two full mock exams, trap patterns, per-domain mental models.">
+<meta name="twitter:image" content="https://chitboon.github.io/ccdv-f-field-guide/assets/og-image.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "name": "CCDV-F Field Guide — Claude Certified Developer Foundations Study Guide",
+  "description": "Unofficial study guide for the Claude Certified Developer – Foundations (CCDV-F) exam by Anthropic. 423 practice items, two blueprint-exact 53-item mock exams, 12 trap patterns, and per-domain mental models across all eight exam domains.",
+  "provider": { "@type": "Person", "name": "Chit Boon Lee", "url": "https://github.com/chitboon" },
+  "educationalLevel": "Intermediate",
+  "teaches": ["Claude API mechanics","Agents and workflows","Tools and MCP","Prompt and context engineering","Model selection and optimization","Security and safety","Eval, testing and debugging","Claude Code"],
+  "coursePrerequisites": "Working experience building applications against an LLM API",
+  "isAccessibleForFree": true,
+  "inLanguage": "en",
+  "courseMode": "online",
+  "hasCourseInstance": { "@type": "CourseInstance", "courseMode": "online", "courseWorkload": "PT20H" },
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD", "category": "Exam Preparation" },
+  "about": { "@type": "Thing", "name": "Claude Certified Developer – Foundations (CCDV-F) Certification" }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "What is the CCDV-F exam?",
+      "acceptedAnswer": { "@type": "Answer", "text": "The Claude Certified Developer – Foundations (CCDV-F) is Anthropic's developer-level certification. It has 53 items across 120 minutes, costs $125 USD, is scored 100–1000 with a pass mark of 720, and is valid for 12 months. Anthropic's exam guide states the format is multiple-choice and multiple-response items, with each item stating how many answers to select." } },
+    { "@type": "Question", "name": "What domains are on the CCDV-F exam?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Eight domains: Applications and Integration (33.1%), Model Selection and Optimization (16.8%), Agents and Workflows (14.7%), Prompt and Context Engineering (11.0%), Tools and MCPs (10.6%), Security and Safety (8.1%), Claude Code (3.1%), and Eval, Testing and Debugging (2.6%). Two thirds of the paper sits in the first three." } },
+    { "@type": "Question", "name": "How many practice items does the CCDV-F Field Guide include?",
+      "acceptedAnswer": { "@type": "Answer", "text": "423 practice items: two blueprint-exact 53-item mock exams, 139 domain drills, 57 targeted gap drills, 53 concept drills, 53 scenario drills, and a 15-item diagnostic quiz. Every item is hand-authored and passes automated checks for answer-position balance, option-length bias, phrasing overlap, source provenance, and near-duplication." } },
+    { "@type": "Question", "name": "What does the CCDV-F exam actually emphasise?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Architectural judgement over syntax recall. The recurring principle is to prefer structural, deterministic mechanisms over prompt-level requests: a validating hook rather than an instruction, a separate message array per tenant rather than a label in the prompt, a schema rather than a plea for well-formed output." } }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "CCDV-F Field Guide", "item": "https://chitboon.github.io/ccdv-f-field-guide/" },
+    { "@type": "ListItem", "position": 2, "name": "Study Guide", "item": "https://chitboon.github.io/ccdv-f-field-guide/guide/" }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --ground:#FAF9F6; --surface:#FFFFFF; --surface-2:#F1F0EB;
+    --ink:#1C2028; --ink-mid:#4A515C; --ink-soft:#6E7681;
+    --accent:#1F6F8B; --accent-soft:#E7F0F4;
+    --rule:#DEDCD4; --rule-soft:#E9E7E0;
+    --serif:'Newsreader',Georgia,serif;
+    --sans:'IBM Plex Sans',system-ui,-apple-system,sans-serif;
+    --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  }
+  @media(prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --ground:#14171C; --surface:#1B1F26; --surface-2:#22272F;
+      --ink:#E8EAED; --ink-mid:#B0B7C0; --ink-soft:#868D96;
+      --accent:#6FBDD6; --accent-soft:#17262C;
+      --rule:#2B313A; --rule-soft:#232931;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#14171C; --surface:#1B1F26; --surface-2:#22272F;
+    --ink:#E8EAED; --ink-mid:#B0B7C0; --ink-soft:#868D96;
+    --accent:#6FBDD6; --accent-soft:#17262C;
+    --rule:#2B313A; --rule-soft:#232931;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:860px;margin:0 auto;padding:0 24px}
+  a{color:var(--accent)}
+  header{border-top:8px solid var(--accent);padding:56px 0 8px}
+  .kicker{font-family:var(--mono);font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 14px}
+  h1{font-family:var(--serif);font-weight:600;font-size:clamp(2.1rem,6vw,3.1rem);line-height:1.1;margin:0 0 12px;letter-spacing:-.01em}
+  .lede{font-size:1.12rem;color:var(--ink-mid);margin:0 0 28px;max-width:64ch}
+  .facts{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--rule);border-radius:10px;overflow:hidden;background:var(--surface);margin:0 0 12px}
+  .fact{flex:1 1 132px;padding:14px 16px;border-right:1px solid var(--rule-soft)}
+  .fact:last-child{border-right:0}
+  .fact b{display:block;font-family:var(--mono);font-size:1.18rem;color:var(--accent);font-weight:500}
+  .fact span{font-size:.8rem;color:var(--ink-soft)}
+  .note{background:var(--accent-soft);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:14px 18px;margin:26px 0;font-size:.95rem;color:var(--ink-mid)}
+  h2{font-family:var(--serif);font-weight:600;font-size:1.62rem;margin:46px 0 6px;letter-spacing:-.01em}
+  h2+p{margin-top:0;color:var(--ink-mid)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin:20px 0}
+  .card{display:block;background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:16px 18px;text-decoration:none;color:inherit;transition:border-color .15s,transform .15s}
+  .card:hover{border-color:var(--accent);transform:translateY(-1px)}
+  .card .w{font-family:var(--mono);font-size:.82rem;color:var(--accent)}
+  .card .t{font-weight:600;margin:3px 0 4px}
+  .card .d{font-size:.86rem;color:var(--ink-soft);line-height:1.5}
+  ul.plain{list-style:none;padding:0;margin:14px 0}
+  ul.plain li{padding:9px 0;border-bottom:1px solid var(--rule-soft);font-size:.95rem}
+  ul.plain li:last-child{border-bottom:0}
+  ul.plain .n{font-family:var(--mono);color:var(--ink-soft);font-size:.84rem}
+  footer{margin:64px 0 0;border-top:1px solid var(--rule);padding:26px 0 56px;font-size:.86rem;color:var(--ink-soft)}
+  footer a{color:var(--ink-mid)}
+  @media(max-width:560px){.fact{flex:1 1 50%;border-bottom:1px solid var(--rule-soft)}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <p class="kicker">Unofficial · community-maintained · free</p>
+    <h1>Claude Certified Developer&nbsp;— Foundations</h1>
+    <p class="lede">A field guide and practice suite for the CCDV-F exam: per-domain mental models, 423 hand-authored practice items, and two blueprint-exact mock papers.</p>
+    <div class="facts">
+      <div class="fact"><b>53</b><span>items</span></div>
+      <div class="fact"><b>120</b><span>minutes</span></div>
+      <div class="fact"><b>720</b><span>to pass / 1000</span></div>
+      <div class="fact"><b>$125</b><span>exam fee</span></div>
+      <div class="fact"><b>12</b><span>months valid</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="note">
+    <strong>Not affiliated with Anthropic.</strong> Every item here is written from the published exam objectives — no exam content is reproduced. Where this guide's observations conflict with Anthropic's official exam guide, <strong>the official guide is correct</strong>. Notes drawn from a single sitting are labelled as such, with confidence levels, in the <a href="00-overview.html">overview</a>.
+  </div>
+
+  <h2>Start here</h2>
+  <p>Two pages carry most of the value.</p>
+  <div class="grid">
+    <a class="card" href="00-overview.html">
+      <div class="w">Orientation</div><div class="t">Overview &amp; exam format</div>
+      <div class="d">Blueprint weights, what one sitting looked like and what that is worth, and the structural-over-prompt-level habit the paper rewards.</div>
+    </a>
+    <a class="card" href="trap-patterns.html">
+      <div class="w">12 patterns</div><div class="t">Trap patterns</div>
+      <div class="d">The recurring wrong answers — plausible, measured, and wrong for a reason you can name once you have seen the shape.</div>
+    </a>
+  </div>
+
+  <h2>The eight domains</h2>
+  <p>Ordered by weight. Two thirds of the paper is the first three.</p>
+  <div class="grid">
+    <a class="card" href="02-applications-and-integration.html"><div class="w">33.1% · 18 items</div><div class="t">Applications &amp; Integration</div><div class="d">Stateless REST mechanics, streaming, exception hierarchy, documents and images, session lifecycle, multi-tenant isolation.</div></a>
+    <a class="card" href="05-model-selection-and-optimization.html"><div class="w">16.8% · 9 items</div><div class="t">Model Selection &amp; Optimization</div><div class="d">Quality-first selection, latency and cost as filters, prompt caching invariants, token accounting, batch processing.</div></a>
+    <a class="card" href="01-agents-and-workflows.html"><div class="w">14.7% · 8 items</div><div class="t">Agents &amp; Workflows</div><div class="d">Workflow versus agent, the tool-use loop, supervisor hierarchies, subagent context isolation, deterministic hooks.</div></a>
+    <a class="card" href="06-prompt-and-context-engineering.html"><div class="w">11.0% · 6 items</div><div class="t">Prompt &amp; Context Engineering</div><div class="d">Delimiting untrusted input, few-shot patterns, instruction placement, structured output, defensive parsing.</div></a>
+    <a class="card" href="08-tools-and-mcps.html"><div class="w">10.6% · 5 items</div><div class="t">Tools &amp; MCPs</div><div class="d">Tool schemas, the description as specification, parallel tool results, MCP tools/resources/prompts, transports.</div></a>
+    <a class="card" href="07-security-and-safety.html"><div class="w">8.1% · 4 items</div><div class="t">Security &amp; Safety</div><div class="d">Direct versus indirect injection, insecure output handling, pre- and post-execution hooks, least privilege, secrets.</div></a>
+    <a class="card" href="03-claude-code.html"><div class="w">3.1% · 2 items</div><div class="t">Claude Code</div><div class="d">CLAUDE.md hierarchy, settings precedence, headless mode, slash commands, hooks, MCP configuration.</div></a>
+    <a class="card" href="04-eval-testing-and-debugging.html"><div class="w">2.6% · 1 item</div><div class="t">Eval, Testing &amp; Debugging</div><div class="d">Deterministic assertions versus model-as-judge, golden sets, boundary tracing, silent truncation.</div></a>
+  </div>
+
+  <h2>Practice suite — 423 items</h2>
+  <p>Every item is hand-authored and passes automated checks for answer-position balance, option-length bias, phrasing overlap, source provenance, and near-duplication against the rest of the bank.</p>
+  <ul class="plain">
+    <li><span class="n">106</span> · <a href="../practice/mocks/mock-1.html">Mock exam 1</a> and <a href="../practice/mocks/mock-2.html">mock exam 2</a> — blueprint-exact, 53 items each, sealed keys, zero stem overlap between them</li>
+    <li><span class="n">139</span> · <a href="../practice/domain-drills/d2-domain-drill.html">Domain drills</a> — roughly twice exam volume per domain</li>
+    <li><span class="n">57</span> · Targeted gap drills — <a href="../practice/targeted-drills/session-and-agent-basics.html">session lifecycle &amp; agent basics</a>, <a href="../practice/targeted-drills/coverage-gap-drill-2.html">coverage gaps</a>, and objective-level top-ups</li>
+    <li><span class="n">106</span> · <a href="../practice/concept-drills/ccdv-f-concept-drills.html">Concept drills</a> and <a href="../practice/scenario-drills/ccdv-f-scenario-drills.html">scenario drills</a></li>
+    <li><span class="n">15</span> · <a href="../practice/diagnostic-quiz/ccdv-f-diagnostic-quiz.html">Diagnostic quiz</a> — sit this first to find your weak domains</li>
+  </ul>
+
+  <h2>How the items are built</h2>
+  <p>Most published question banks give themselves away: the correct answer is the longest option, or the wrong ones are padded filler you can eliminate without knowing anything. Three checks in <code>tools/</code> run against every set — answer-position balance by chi-square, option-length rank spread, shared phrasing between options, verbatim overlap against source material, and near-duplicate detection across the whole bank. A fourth measure keeps absolute language ("never", "always", "entirely") at the same rate in correct answers as in distractors, so register cannot be used as a shortcut.</p>
+</main>
+
+<footer class="wrap">
+  <p><strong>Unofficial.</strong> Not affiliated with, endorsed by, or sponsored by Anthropic. "Claude" is a trademark of Anthropic, PBC. Practice items are written from the published exam objectives; no exam content is reproduced.</p>
+  <p><a href="https://github.com/chitboon/ccdv-f-field-guide">Source on GitHub</a> · <a href="../SOURCES.html">Sources</a> · <a href="../CONTRIBUTING.html">Contributing</a> · MIT licensed · Maintained by <a href="https://github.com/chitboon">Chit Boon Lee</a></p>
+</footer>
+</body>
+</html>

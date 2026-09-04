@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://chitboon.github.io/ccdv-f-field-guide/sitemap.xml
