@@ -8,7 +8,7 @@ Domain 5 is the second-heaviest domain of the CCDV-F exam (16.8% / 9 items). It 
 
 ## 1. Model Selection Strategy: The "Quality First" Invariant
 
-On the CCDV-F exam, model selection questions are framed in terms of **abstract capability tiers, quality thresholds, and latency/cost trade-offs** rather than fixed model names.
+On the one sitting this guide draws on, model selection questions were framed in terms of **abstract capability tiers, quality thresholds, and latency/cost trade-offs** rather than fixed model names.
 
 ### The Optimization Sequence
 1. **Meet the Quality Bar First:** Always validate task feasibility using the highest-capability tier first. Establish an accurate ground-truth baseline to verify that Claude can perform the reasoning and tool use reliably.

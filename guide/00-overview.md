@@ -22,16 +22,22 @@ The exam tests 8 domains weighted heavily toward application engineering and fou
 
 ---
 
-## 2. What the Exam is Actually Like (The Real Register)
+## 2. One Sitting's Observations — and What They Are Worth
 
-Preparation materials frequently over-index on low-level syntax drills or lengthy code debugging. In reality, the live CCDV-F examination has distinct characteristics:
+**Read this section as a single data point, not as the specification.** The notes below come from **one candidate's sitting on 2026-09-04** (scored 926/1000). Exam forms rotate and item pools differ between candidates, so treat these as *likely* characteristics to calibrate against — never as guarantees to prepare around.
 
-1. **Format:** Every scored question is **single-response (four options, one correct, no multi-select)**. There are no "Select TWO" questions on the live paper.
-2. **Stem Length:** Question stems are **concise scenarios (typically 3–4 sentences, ~35–60 words)** describing a production requirement, architectural symptom, or boundary failure.
-3. **No Code Snippets:** You will not be asked to debug raw Python code lines or find missing colons in stems. Questions test **architectural decisions, API mechanics, error classifications, and protocol lifecycles**.
-4. **No Proprietary Model Names:** Model selection questions are framed in terms of **abstract capability tiers and tradeoffs**—quality, latency, cost per task, context requirements, and throughput—rather than ephemeral model version strings.
-5. **Session Lifecycle is Tested:** Managing multiple user sessions, persistence boundaries, conversational state isolation across tenants, and session eviction are core questions.
-6. **Generous Pacing:** Because stems are 3–4 sentences without code blocks, reading load is moderate. Candidates commonly finish their first pass in 50–60 minutes, leaving ample time to review flagged items.
+**Where this conflicts with the official guide, the official guide wins.** Anthropic's published exam guide states the item format is *"Multiple-choice and multiple-response items; each item states how many"* — so multiple-response items are part of the specification even though none appeared on this particular form. **Prepare for them.**
+
+| Observed on this form | Confidence | How to use it |
+|---|---|---|
+| All items single-response; no "Select TWO" appeared | **Low** — contradicts the official spec | Still practise multi-response. Read the response-count line on every item. |
+| Stems ran 3–4 sentences (~35–60 words) | Medium | Expect concise scenarios, not long code-bearing vignettes. |
+| No code snippets in any stem | Medium | Study mechanisms and architecture over syntax recall — but know the shapes. |
+| No model version strings; selection framed as quality / latency / cost | Medium | Learn the tradeoff reasoning, not a model lineup that will be stale by your sitting. |
+| Session lifecycle was tested | Medium | Multi-session state, persistence boundaries, isolation, eviction. See Domain 2. |
+| First pass finished in ~60 of 120 minutes | Low — one person, one form | Do not plan on slack. Rehearse against the clock and you lose nothing if it is generous. |
+
+**What generalises and what does not.** The blueprint weights in §1 are published by Anthropic and are stable — build your study time on those. Everything in the table above is one observation; the further a claim goes beyond "this is what one form looked like", the less weight it deserves.
 
 ---
 
