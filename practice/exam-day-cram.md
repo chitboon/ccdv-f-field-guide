@@ -29,7 +29,7 @@ Two thirds of the paper is D2 + D5 + D1. Budget your attention there.
 
 **Your practice bank leaked answers through extreme language.** Measured across the 245 items in the bank at audit time: absolutes ("never", "at all", "regardless", "entirely") appear in **27.7% of distractors vs 7.3% of correct answers — a 3.8× tell**. You have been rewarded for eliminating the loud option. **Real exam distractors are plausible and measured.** Kill that reflex at the door: choose on the mechanism, not the register.
 
-**Discount both mock scores.** Mock 1 (96.2%) and Mock 2 (98.1%) were authored by the same pipeline as the drills, against the same objective list, **before** the coverage audit — and both were sat **untimed, split across sittings, with immediate per-item feedback**. They measured "no gaps in what I chose to test." Neither is a predicted score. The honest first-pass number is **90.5% across the 168 non-mock items**, and the two clusters that cost marks (objectives 1.2 and 5.1) sit in §5 and §6, not in the drilled domains.
+**Discount both mock scores.** Mock 1 (96.2%) and Mock 2 (98.1%) were authored by the same pipeline as the drills, against the same objective list, **before** the coverage audit — and both were sat **untimed, split across sittings, with immediate per-item feedback**. They measured "no gaps in what I chose to test." Neither is a predicted score. The honest first-pass number is **87.9% across all 198 non-mock items (174/198)** (after probing the audited gaps with 8/10 on Current-API and 14/20 on Coverage-Gap 2), and the clusters that cost marks sit in §5b and §6, not in the drilled domains.
 
 ---
 
@@ -151,6 +151,30 @@ fewer. Two sit inside the paper's largest sub-objectives. One line each.
 7. **Mid-conversation system messages preserve prompt cache.** To inject an operator instruction mid-session without invalidating the cached top-level system prompt or prefix, append `{"role": "system", "content": ...}` directly into the `messages` array. Do **not** modify the top-level `system` parameter (breaks prefix matching) and do **not** inject `"SYSTEM:"` markers into user turns (untrusted user/doc channel). *(Current-API Drill Item 5)*
 
 8. **Batch results are unordered & union-typed.** `client.messages.batches.results()` returns rows in **non-deterministic order** — never `zip(rows, results)`; always match using **`custom_id`**. Furthermore, only `result.type == "succeeded"` carries `.message`; checking `.message` on errored/canceled/expired entries raises `AttributeError`. *(Current-API Drill Item 10)*
+
+9. **What the SDK adds over raw HTTP — know the positive form.** Typed exception classes per status · automatic retries (default `max_retries` **2**, on 408/409/429/5xx **and connection errors**) · streaming event assembly · typed request/response objects. Two things it does **not** add: the Messages API is **stateless**, so you resend the full history every turn either way; and pinning a client version cannot make the server accept a request shape it has retired. *(Coverage-Gap Drill 2 Item 1)*
+
+10. **Prompt cache token billing & lack of `thinking_tokens`.** In `response.usage`, `cache_creation_input_tokens` (billed at 1.25× base input) and `cache_read_input_tokens` (billed at 0.10×) are reported as **separate counters outside `input_tokens`**. Summing only `input_tokens + output_tokens` under-reports spend. Thinking tokens are billed as output inside `output_tokens` (there is **no** `thinking_tokens` field). *(Coverage-Gap Drill 2 Item 4)*
+
+11. **Tool `description` is the semantic specification.** `strict: true` guarantees JSON Schema syntactic adherence; it **never** dictates whether invoking a tool is semantically appropriate. Claude relies strictly on the natural language `description` to decide *when* and *why* to invoke a tool. *(Coverage-Gap Drill 2 Item 6)*
+
+12. **Project-level plugin & toolkit version pinning.** To prevent cross-developer tool/environment drift, commit pinned toolkit versions in checked-in project configuration (`.claude/`). Per-machine global installations drift across environments. MCP is an interoperability protocol, not a plugin package manager. *(Coverage-Gap Drill 2 Item 8)*
+
+13. **Failure boundary tracing.** Systematically isolate failures at architecture boundaries before modifying prompts: if `tool_use.input` contains a valid property but the database row is empty/null, the defect is in the **integration/persistence code**, not model prompting or JSON schema. *(Coverage-Gap Drill 2 Item 12)*
+
+14. **Structural multi-tenant session hygiene.** Multi-tenant boundaries must be **structural in data architecture** (isolated `messages` array per tenant, tenant-specific policy in top-level `system`, independent prefix caching), not delegated to an in-band instruction — a tenant id in the prompt is a label, not a boundary. *(Coverage-Gap Drill 2 Item 20)*
+
+---
+
+## 7. The shape of your last six misses — read this if you read nothing else
+
+Coverage-Gap Drill 2 went **14/20**, and the six misses were not scattered:
+
+- **All six were zero-coverage topics.** None of the merely-thin ones. Your blind spots and the bank's blind spots are the same set, so the untested §5b lines are worth more per minute than anything you have drilled.
+- **Two of the six are objective 2.5 — the largest sub-objective on the paper at 8.6%** (items 8 and 20: plugin/toolkit version pinning, and per-tenant session isolation). The other four sit in 5.2 (6.1%), 5.4, 8.1 (4.4%), 4.1. Weighted, the misses land in roughly a fifth of the paper.
+- **Multi-response went 4/4.** That format is fixed — the per-option true/false habit held. Spend no more time on it.
+
+**Re-read, in this order:** §5b per-tenant session hygiene · §5b plugin management · §5b SDK-over-REST · §5b `usage` counters · §5b tool description writing · §5b isolating a failure.
 
 ---
 
